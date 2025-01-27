@@ -6,29 +6,27 @@ using namespace std;
 int solution(vector<string> want, vector<int> number, vector<string> discount) {
     int answer = 0;
     map<string, int> WantList;
-    for(int i=0;i<want.size();++i)
+    for(int i=0;i<9;++i)
     {
-        WantList[want[i]]=number[i];
+        ++WantList[discount[i]];
     }
-    for(int j=0;j<discount.size()-9;++j)
+    for(int j=9;j<discount.size();++j)
     {
-        map<string, int> Copy(WantList.begin(),WantList.end());
-        for(int k=0;k<10;++k)
+        ++WantList[discount[j]];
+        bool flag=true;
+        for(int k=0;k<want.size();++k)
         {
-            auto it=Copy.find(discount[j+k]);
-            if(it!=Copy.end())
+            if(WantList[want[k]]!=number[k])
             {
-                --Copy[discount[j+k]];
-                if(Copy[discount[j+k]]==0)
-                {
-                    Copy.erase(discount[j+k]);   
-                }
+                flag=false;
+                break;
             }
         }
-        if(Copy.empty())
+        if(flag)
         {
-            answer++;
+            ++answer;
         }
+        --WantList[discount[j-9]];
     }
     return answer;
 }
