@@ -10,7 +10,6 @@ int TimeConvert(string time)
 }
 
 int solution(vector<vector<string>> book_time) {
-    int answer = 0;
     vector<pair<int, int>> list;
     for(auto v : book_time)
     {
@@ -21,6 +20,7 @@ int solution(vector<vector<string>> book_time) {
     sort(list.begin(),list.end());
     
     priority_queue<int, vector<int>, greater<int>> pq;
+    int MaxRoomCount=0;
     for(auto i : list)
     {
         if(!pq.empty()&&pq.top()<=i.first)
@@ -28,8 +28,9 @@ int solution(vector<vector<string>> book_time) {
             pq.pop();
         }
         pq.push(i.second);
+        MaxRoomCount=max((int)pq.size(),MaxRoomCount);
     }
     
     
-    return pq.size();
+    return MaxRoomCount;
 }
