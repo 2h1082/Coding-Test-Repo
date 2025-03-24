@@ -3,53 +3,37 @@
 #include <iostream>
 #include <algorithm>
 using namespace std;
-int Min=INT_MAX;
-void DFS(int start,int count,int N, vector<vector<int>>& S, vector<bool>& Team)
-{
-    if(count==N/2)
-    {
-        int TrueSum=0,FalseSum=0;
-        for(int i=0;i<N;i++)
-        {
-            for(int j=i+1;j<N;j++)
-            {
-                if(Team[i]&&Team[j])
-                {
-                    TrueSum+=S[i][j]+S[j][i];
-                }
-                else if(!Team[i]&&!Team[j])
-                {
-                    FalseSum+=S[i][j]+S[j][i];
+
+int main() {
+    int N;
+    cin >> N;
+    vector<vector<int>> S(N, vector<int>(N));
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            cin >> S[i][j];
+        }
+    }
+
+    vector<bool> Team(N, false);
+    for (int i = 0; i < N / 2; i++) {
+        Team[i] = true; // 초기 팀 설정
+    }
+
+    int Min = INT_MAX;
+    do {
+        int sumTrue = 0, sumFalse = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = i + 1; j < N; j++) { // 대각선 기준으로만 계산
+                if (Team[i] && Team[j]) {
+                    sumTrue += S[i][j] + S[j][i];
+                } else if (!Team[i] && !Team[j]) {
+                    sumFalse += S[i][j] + S[j][i];
                 }
             }
         }
-        Min=min(Min,abs(TrueSum-FalseSum));
-        return;
-    }
-    for(int i=start;i<N;i++)
-    {
-        if(!Team[i])
-        {
-            Team[i]=true;
-            DFS(i+1,count+1,N,S,Team);
-            Team[i]=false;
-        }
-    }
-}
-int main()
-{
-    int N;
-    cin>>N;
-    vector<vector<int>> S(N,vector<int>(N,0));
-    vector<bool> Team(N,false);
-    for(int i=0;i<N;i++)
-    {
-        for(int j=0;j<N;j++)
-        {
-            cin>>S[i][j];
-        }
-    }
-    DFS(0,0,N,S,Team);
-    cout<<Min;
+        Min = min(Min, abs(sumTrue - sumFalse));
+    } while (prev_permutation(Team.begin(), Team.end())); // 다음 조합 생성
+
+    cout << Min << endl;
     return 0;
 }
