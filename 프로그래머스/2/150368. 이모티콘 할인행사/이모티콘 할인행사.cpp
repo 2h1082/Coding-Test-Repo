@@ -39,10 +39,7 @@ vector<int> solution(vector<vector<int>> users, vector<int> emoticons) {
                     cur[1]+=Total;
                 }
             }
-            if(cur[0]>answer[0]||(cur[0]==answer[0]&&cur[1]>answer[1]))
-            {
-                answer=cur;
-            }
+            answer=max(answer,cur);
             return;
         }        
     };
