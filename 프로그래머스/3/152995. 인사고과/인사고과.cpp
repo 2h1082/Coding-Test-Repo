@@ -7,7 +7,6 @@ int solution(vector<vector<int>> scores) {
     int n=scores.size();
     vector<vector<int>> TempV;
     int WanhoSum=scores[0][0]+scores[0][1];
-    vector<int> WanhoScore=scores[0];
     vector<bool> Incentive(n,true);
     
     for(int i=0;i<n;i++)
