@@ -10,33 +10,26 @@ vector<int> solution(int n, vector<vector<int>> roads, vector<int> sources, int 
         graph[r[0]].push_back(r[1]);
         graph[r[1]].push_back(r[0]);
     }
-    
-    for(auto& s:sources)
+    vector<int> dist(n+1,INT_MAX);
+    queue<int> q;
+    dist[destination]=0;
+    q.push(destination);
+    while(!q.empty())
     {
-        queue<pair<int,int>> q;
-        vector<bool> v(n+1,false);
-        q.push({s,0});
-        v[s]=true;
-        bool find=false;
-        while(!q.empty())
+        int cur=q.front();
+        q.pop();
+        for(int next:graph[cur])
         {
-            auto [cur,count]=q.front();
-            q.pop();
-            if(destination==cur)
-            {
-                answer.push_back(count);
-                find=true;
-            }
-            for(auto& next:graph[cur])
-            {
-                if(!v[next])
-                {
-                    v[next]=true;
-                    q.push({next,count+1});
-                }
-            }
+           if(dist[next]==INT_MAX)
+           {
+               dist[next]=dist[cur]+1;
+               q.push(next);
+           }
         }
-        if(!find) answer.push_back(-1);
+    }
+    for(int s:sources)
+    {
+        answer.push_back(dist[s]==INT_MAX?-1:dist[s]);
     }
     return answer;
 }
