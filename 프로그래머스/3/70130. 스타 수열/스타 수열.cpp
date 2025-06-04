@@ -15,7 +15,8 @@ int solution(vector<int> a) {
 
     vector<pair<int,int>> items;
     items.reserve(freq.size());
-    for (auto &kv : freq) {
+    for (auto &kv : freq) 
+    {
         items.emplace_back(kv.first, kv.second);
     }
     sort(items.begin(), items.end(), [](auto &L, auto &R) {
@@ -24,21 +25,27 @@ int solution(vector<int> a) {
 
     int bestLen = 0;  
 
-    for (auto &p : items) {
+    for (auto &p : items) 
+    {
         int x = p.first;
         int countX = p.second;
 
-        if (countX * 2 <= bestLen) {
+        if (countX * 2 <= bestLen) 
+        {
             break;  
         }
 
         int pairs = 0;
         int i = 0;
-        while (i < n - 1) {
-            if ((a[i] == x || a[i+1] == x) && (a[i] != a[i+1])) {
+        while (i < n - 1) 
+        {
+            if ((a[i] == x || a[i+1] == x) && (a[i] != a[i+1])) 
+            {
                 pairs++;
                 i += 2;  
-            } else {
+            } 
+            else 
+            {
                 i += 1;  
             }
         }
