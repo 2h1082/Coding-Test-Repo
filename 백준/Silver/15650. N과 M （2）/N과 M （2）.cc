@@ -3,9 +3,9 @@
 
 using namespace std;
 int N=0,M=0;
-void DFS(int Index, int Count,vector<int> Nums)
+vector<int> Nums;
+void DFS(int Index, int Count)
 {
-    Nums.push_back(Index);
     if(Count==M)
     {
         for (auto& Num:Nums)
@@ -15,9 +15,11 @@ void DFS(int Index, int Count,vector<int> Nums)
         cout<<"\n";
         return;
     }
-    for(int i=Index+1;i<=N;++i)
+    for(int i=Index;i<=N;++i)
     {
-        DFS(i,Count+1,Nums);
+        Nums.push_back(i);
+        DFS(i+1,Count+1);
+        Nums.pop_back();
     }
 }
 int main()
@@ -26,9 +28,6 @@ int main()
     cin.tie(NULL);
     
     cin>>N>>M;
-    for(int i=1;i<=N-M+1;++i)
-    {
-        DFS(i,1,vector<int>());
-    }
-    
+    Nums.reserve(M);
+    DFS(1,0);
 }
