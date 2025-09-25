@@ -3,45 +3,7 @@
 
 using namespace std;
 int N=0;
-int Count=0;
 vector<vector<int>> Blocks;
-int dx[3]={1,0,1};
-int dy[3]={0,1,1};
-void DFS(int X, int Y, int Type)
-{
-    if(X==N-1&&Y==N-1)
-    {
-        Count++;
-        return;
-    }
-    int NextX=0;
-    int NextY=0;
-    if (Type==0||Type==2)
-    {
-        NextX=X+dx[0];
-        NextY=Y+dy[0];
-        if (NextX<N&&NextY<N&&!Blocks[NextY][NextX])
-        {
-            DFS(NextX,NextY,0);
-        }
-    }
-    if (Type==1||Type==2)
-    {
-        NextX=X+dx[1];
-        NextY=Y+dy[1];
-        if (NextX<N&&NextY<N&&!Blocks[NextY][NextX])
-        {
-            DFS(NextX,NextY,1);
-        }
-    }
-    NextX=X+dx[2];
-    NextY=Y+dy[2];
-    if (NextX<N&&NextY<N&&!Blocks[NextY][NextX]&&!Blocks[NextY][X]&&!Blocks[Y][NextX])
-    {
-        DFS(NextX,NextY,2);
-    }
-    
-}
 int main()
 {
     cin>>N;
@@ -53,6 +15,26 @@ int main()
             cin>>Blocks[i][j];
         }
     }
-    DFS(1,0,0); // 0 : ㅡ, 1 : |, 2 : 
-    cout<<Count;
+    vector<vector<vector<int>>> DP(N,vector<vector<int>>(N,vector<int>(3,0)));
+    DP[0][1][0]=1;
+    for(int r=0;r<N;++r)
+    {
+        for(int c=2;c<N;++c)
+        {
+            if(!Blocks[r][c])
+            {
+                DP[r][c][0]=DP[r][c-1][0]+DP[r][c-1][2];
+                if(r>0)
+                {
+                    DP[r][c][1]=DP[r-1][c][1]+DP[r-1][c][2];
+                }
+                if(r>0&&c>0&&!Blocks[r-1][c]&&!Blocks[r][c-1])
+                {
+                    DP[r][c][2]=DP[r-1][c-1][0]+DP[r-1][c-1][1]+DP[r-1][c-1][2];
+                }
+            }
+        }
+    }
+    
+    cout<<DP[N-1][N-1][0]+DP[N-1][N-1][1]+DP[N-1][N-1][2];
 }
