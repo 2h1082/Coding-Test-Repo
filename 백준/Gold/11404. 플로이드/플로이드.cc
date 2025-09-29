@@ -18,7 +18,7 @@ int main()
         cin>>From>>To>>Cost;
         Bus[From-1][To-1]=min(Bus[From-1][To-1],Cost);
     }
-    for(int k=0;k<N;++k)
+    for(int k=N-1;k>=0;--k)
     {
         for(int i=0;i<N;++i)
         {
