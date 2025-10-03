@@ -56,7 +56,7 @@ int main()
     while(!Stack.empty())
     {
         Formula+=Stack.back();
-        Stack.resize(Stack.size()-1);
+        Stack.pop_back();
     }
     cout<<Formula;
 }
