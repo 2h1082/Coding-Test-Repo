@@ -7,7 +7,7 @@ int main()
     int C=0,N=0;
     cin>>C>>N;
     vector<pair<int,int>> Info(N);
-    vector<int> DP(3001,INT_MAX);
+    vector<int> DP(2001,INT_MAX);
     for(auto& I : Info)
     {
         cin>>I.first>>I.second;
@@ -16,7 +16,7 @@ int main()
     for (auto& I : Info)
     {
         int Cost=I.first, Count=I.second;
-        for (int i=Count;i<=3000;++i)
+        for (int i=Count;i<=2000;++i)
         {
             if (DP[i-Count]!=INT_MAX)
             {
