@@ -7,7 +7,7 @@ vector<vector<bool>> Col;
 vector<vector<bool>> Row;
 vector<vector<bool>> Box;
 int N=9;
-void DFS(int Idx)
+bool DFS(int Idx)
 {
     if(Idx==CheckList.size())
     {
@@ -15,7 +15,7 @@ void DFS(int Idx)
         {
             cout<<R<<"\n";
         }
-        exit(0);
+        return true;
     }
     
     //const auto& [x,y]=CheckList[Idx];
@@ -26,17 +26,14 @@ void DFS(int Idx)
     {
         if(!Col[x][k]&&!Row[y][k]&&!Box[BoxIdx][k])
         {
-            Col[x][k]=true;
-            Row[y][k]=true;
-            Box[BoxIdx][k]=true;
+            Col[x][k]=Row[y][k]=Box[BoxIdx][k]=true;
             Board[y][x]=k+'0';
-            DFS(Idx+1);
-            Col[x][k]=false;
-            Row[y][k]=false;
-            Box[BoxIdx][k]=false;
+            if(DFS(Idx+1)) return true;
+            Col[x][k]=Row[y][k]=Box[BoxIdx][k]=false;
             Board[y][x]='0';
         }
     }
+    return false;
 }
 int main()
 {
