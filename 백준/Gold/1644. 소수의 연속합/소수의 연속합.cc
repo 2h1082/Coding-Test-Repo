@@ -14,7 +14,7 @@ int main()
     {
         if (Primes[i])
         {
-            for (int j=i*2;j<=N;j+=i)
+            for (int j=i*i;j<=N;j+=i)
             {
                 Primes[j]=false;
             }
@@ -43,4 +43,5 @@ int main()
         }
     }
     cout<<Cnt;
+
 }
