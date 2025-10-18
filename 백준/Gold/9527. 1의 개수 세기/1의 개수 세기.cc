@@ -8,13 +8,14 @@ ll CountOnes(ll N)
     if(N<=0) return 0;
     
     ll Res=0;
-    for(ll Bits=0;Bits<62;++Bits)
+    for(ll Bits=0;Bits<63;++Bits)
     {
         ll Cycles= 1LL<<(Bits+1);
+        ll HalfCycles= 1LL<<(Bits);
         ll FullCount=(N+1)/Cycles;
         ll RemainCount=(N+1)%Cycles;
-        Res+=FullCount*(Cycles/2);
-        Res+= RemainCount>Cycles/2 ? RemainCount-Cycles/2 : 0;
+        Res+=FullCount*(HalfCycles);
+        Res+= RemainCount>HalfCycles ? RemainCount-HalfCycles : 0;
     }
     return Res;
 }
