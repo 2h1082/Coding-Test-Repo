@@ -1,31 +1,28 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using ll = long long;
+using ll=long long;
 
 ll CountOnes(ll N)
 {
-    if (N < 0) return 0;
-    ll res = 0;
-    for (ll bit = 0; bit < 63; ++bit) 
-    { 
-        ll cycle = 1LL << (bit + 1);
-        ll full_cycles = (N + 1) / cycle;
-        ll remainder = (N + 1) % cycle;
-        res += full_cycles * (1LL << bit);
-        if (remainder > (1LL << bit))
-            res += remainder - (1LL << bit);
+    if(N<=0) return 0;
+    
+    ll Res=0;
+    for(ll Bits=0;Bits<62;++Bits)
+    {
+        ll Cycles= 1LL<<(Bits+1);
+        ll FullCount=(N+1)/Cycles;
+        ll RemainCount=(N+1)%Cycles;
+        Res+=FullCount*(Cycles/2);
+        Res+= RemainCount>Cycles/2 ? RemainCount-Cycles/2 : 0;
     }
-    return res;
+    return Res;
 }
 
-int main() 
+int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
-    ll A, B;
-    cin >> A >> B;
-    cout << CountOnes(B) - CountOnes(A - 1) << "\n";
-    return 0;
+    ll A,B;
+    cin>>A>>B;
+    
+    cout<<CountOnes(B)-CountOnes(A-1);
 }
