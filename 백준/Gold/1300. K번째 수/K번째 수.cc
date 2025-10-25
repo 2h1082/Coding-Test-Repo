@@ -18,7 +18,7 @@ int main()
 {
     cin>>N>>k;
     
-    ll l=1, r=LLONG_MAX;
+    ll l=1, r=N*N;
     while(l<r)
     {
         ll m=l+(r-l)/2;
