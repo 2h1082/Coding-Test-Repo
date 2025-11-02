@@ -32,7 +32,7 @@ int main()
             int Sum=Obj[i]+Obj[k];
             if(Sum<=W && Exist[Sum]==-1)
             {
-                Exist[Sum]=i;
+                Exist[Sum]=1;
             }
         }
     }
