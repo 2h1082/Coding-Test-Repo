@@ -2,58 +2,51 @@
 using namespace std;
 
 const int INF = 1e9;
-int N, W;
-int A[2][10005];      // A[0][i] = 위, A[1][i] = 아래
-int dp[3][10005];     // 0: 위만 연결, 1: 아래만 연결, 2: 둘 다
+int N, W;      
+vector<vector<int>> DP,E; 
 
-void Init(int n)
+int SolveCase(int Mode)
 {
-    for (int i = 0; i <= n; ++i)
-        for (int j = 0; j < 3; ++j)
-            dp[j][i] = INF;
-}
-
-int SolveCase(int mode)
-{
-    // mode: 2=기본 / 1=위쪽 wrap / 0=아래쪽 wrap / -1=양쪽 wrap
-    Init(N);
-    dp[0][0] = dp[1][0] = dp[2][0] = 0;
-
+    // Mode: 2=기본 / 1=위쪽 wrap / 0=아래쪽 wrap / -1=양쪽 wrap
+    DP.assign(3,vector<int>(N+1,INF));
+    DP[0][0] = DP[1][0] = DP[2][0] = 0;
+    
+    // 0: 위만 연결, 1: 아래만 연결, 2: 둘 다
     for (int i = 1; i <= N; ++i)
     {
         // 위쪽 처리
-        if (!(i == 1 && (mode == 1 || mode == -1)))
+        if (!(i == 1 && (Mode == 1 || Mode == -1)))
         {
-            dp[0][i] = min(dp[0][i], dp[2][i - 1] + 1);
-            if (A[0][i - 1] + A[0][i] <= W)
-                dp[0][i] = min(dp[0][i], dp[1][i - 1] + 1);
+            DP[0][i] = min(DP[0][i], DP[2][i - 1] + 1);
+            if (E[0][i - 1] + E[0][i] <= W)
+                DP[0][i] = min(DP[0][i], DP[1][i - 1] + 1);
         }
-        else dp[0][i] = 0;
+        else DP[0][i] = 0;
 
         // 아래쪽 처리
-        if (!(i == 1 && (mode == 0 || mode == -1)))
+        if (!(i == 1 && (Mode == 0 || Mode == -1)))
         {
-            dp[1][i] = min(dp[1][i], dp[2][i - 1] + 1);
-            if (A[1][i - 1] + A[1][i] <= W)
-                dp[1][i] = min(dp[1][i], dp[0][i - 1] + 1);
+            DP[1][i] = min(DP[1][i], DP[2][i - 1] + 1);
+            if (E[1][i - 1] + E[1][i] <= W)
+                DP[1][i] = min(DP[1][i], DP[0][i - 1] + 1);
         }
-        else dp[1][i] = 0;
+        else DP[1][i] = 0;
 
         // 위아래 모두
-        if (!(i == 1 && mode == -1))
+        if (!(i == 1 && Mode == -1))
         {
-            dp[2][i] = min({dp[0][i] + 1, dp[1][i] + 1, dp[2][i]});
-            if (A[0][i] + A[1][i] <= W)
-                dp[2][i] = min(dp[2][i], dp[2][i - 1] + 1);
-            if (i - 2 >= 0 && A[0][i - 1] + A[0][i] <= W && A[1][i - 1] + A[1][i] <= W)
-                dp[2][i] = min(dp[2][i], dp[2][i - 2] + 2);
+            DP[2][i] = min({DP[0][i] + 1, DP[1][i] + 1, DP[2][i]});
+            if (E[0][i] + E[1][i] <= W)
+                DP[2][i] = min(DP[2][i], DP[2][i - 1] + 1);
+            if (i - 2 >= 0 && E[0][i - 1] + E[0][i] <= W && E[1][i - 1] + E[1][i] <= W)
+                DP[2][i] = min(DP[2][i], DP[2][i - 2] + 2);
         }
-        else dp[2][i] = 0;
+        else DP[2][i] = 0;
     }
 
-    if (mode == 2) return dp[2][N];
-    if (mode == 1 || mode == 0) return dp[mode][N] + 1;
-    return dp[2][N - 1] + 2;
+    if (Mode == 2) return DP[2][N];
+    if (Mode == 1 || Mode == 0) return DP[Mode][N] + 1;
+    return DP[2][N - 1] + 2;
 }
 
 int main()
@@ -67,20 +60,22 @@ int main()
     while (T--)
     {
         cin >> N >> W;
-        for (int j = 0; j < 2; ++j)
-            for (int i = 1; i <= N; ++i)
-                cin >> A[j][i];
+        E.assign(2,vector<int>(N+1,0));
+        
+        for (int i = 0; i<2; ++i)
+            for (int j=1;j<=N;++j)
+                cin>>E[i][j];
 
-        vector<int> modes = {2};
-        if (A[0][1] + A[0][N] <= W) modes.push_back(1);     // 위 wrap
-        if (A[1][1] + A[1][N] <= W) modes.push_back(0);     // 아래 wrap
-        if (A[0][1] + A[0][N] <= W && A[1][1] + A[1][N] <= W) modes.push_back(-1); // 양쪽 wrap
+        vector<int> Modes = {2};
+        if (E[0][1] + E[0][N] <= W) Modes.push_back(1);     // 위 wrap
+        if (E[1][1] + E[1][N] <= W) Modes.push_back(0);     // 아래 wrap
+        if (E[0][1] + E[0][N] <= W && E[1][1] + E[1][N] <= W) Modes.push_back(-1); // 양쪽 wrap
 
-        int ans = INF;
-        for (int mode : modes)
-            ans = min(ans, SolveCase(mode));
+        int Ans = INF;
+        for (int Mode : Modes)
+            Ans = min(Ans, SolveCase(Mode));
 
-        cout << ans << '\n';
+        cout << Ans << '\n';
     }
     return 0;
 }
