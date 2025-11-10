@@ -2,6 +2,7 @@
 using namespace std;
 using ll=long long;
 int C, N, Q;
+set<string> Nick;
 struct Trie
 {
     bool bIsEnd;
@@ -20,17 +21,21 @@ struct Trie
         }
         Cur->bIsEnd=true;
     }
-    int CheckWord(const string& S, vector<bool>& Check)
+    int CheckWord(const string& S)
     {
         Trie* Cur=this;
-        for(int i=0;i<S.size();++i)
+        for(int i=0;i<S.size()-1;++i)
         {
             if(!Cur->Nxt[S[i]]) break;
             
             Cur=Cur->Nxt[S[i]];
-            if(Cur->bIsEnd) Check[i]=true;
+            if(Cur->bIsEnd) 
+            {
+                string Remain=S.substr(i+1,S.size());
+                if(Nick.find(Remain)!=Nick.end()) return true;
+            }
         }
-        return 0;
+        return false;
     }
 };
 
@@ -40,7 +45,7 @@ int main()
     cin.tie(NULL);
     
     cin>>C>>N;
-    Trie Color, Nick;
+    Trie Color;
     string T;
     
     while(C--)
@@ -52,8 +57,7 @@ int main()
     while(N--)
     {
         cin>>T;
-        reverse(T.begin(),T.end());
-        Nick.Insert(T);
+        Nick.insert(T);
     }
     cin>>Q;
     
@@ -62,22 +66,8 @@ int main()
         string Team;
         cin>>Team;
         int L=Team.size();
-        
-        vector<bool> ColEnd(L,false), NickEnd(L,false);
-        Color.CheckWord(Team,ColEnd);
-        reverse(Team.begin(),Team.end());
-        Nick.CheckWord(Team,NickEnd);
-        reverse(NickEnd.begin(),NickEnd.end());
-        
-        bool bIsLegendary=false;
-        for(int i=0;i<L-1;++i)
-        {
-            if(ColEnd[i]&&NickEnd[i+1])
-            {
-                bIsLegendary=true;
-                break;
-            }
-        }
-        cout<<(bIsLegendary ? "Yes\n" : "No\n");
+       
+        bool bIsLegend=Color.CheckWord(Team);
+        cout<<(bIsLegend ? "Yes\n" : "No\n");
     }    
 }
