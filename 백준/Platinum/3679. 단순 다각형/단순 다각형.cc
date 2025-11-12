@@ -37,7 +37,7 @@ int main()
         int s=0;
         for(int i=1;i<n;++i)
         {
-            if(A[i].y<A[s].y || (A[i].y==A[s].y&&A[i].x<A[s].x)) s=i;
+            if(A[i].x<A[s].x || (A[i].x==A[s].x&&A[i].y<A[s].y)) s=i;
         }
         swap(A[0],A[s]);
         
