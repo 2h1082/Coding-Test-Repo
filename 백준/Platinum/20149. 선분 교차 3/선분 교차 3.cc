@@ -16,19 +16,20 @@ int CCW(P& A, P& B, P& C)
 
 void FindIntersection(P& A, P& B, P& C, P& D)
 {
-    double px=(A.x*B.y-A.y*B.x)*(C.x-D.x) - (A.x-B.x)*(C.x*D.y-C.y*D.x);
-    double py=(A.x*B.y-A.y*B.x)*(C.y-D.y) - (A.y-B.y)*(C.x*D.y-C.y*D.x);
-    double p = (A.x-B.x)*(C.y-D.y)-(A.y-B.y)*(C.x-D.x);
+    // Ax+By=C
+    double A1=B.y-A.y, B1=A.x-B.x, A2=D.y-C.y, B2=C.x-D.x;
+    double C1=A1*A.x+B1*A.y, C2=A2*C.x+B2*C.y;
+    double Det=A1*B2-A2*B1;
     
-    if(p==0)
+    if(Det==0)
     {
         if(B==C&&A<=C) cout<<B.x<<' '<<B.y<<'\n';
         else if(A==D&&C<=A) cout<<A.x<<' '<<A.y<<'\n';
     }
     else
     {
-        double ResX=px/p;
-        double ResY=py/p;
+        double ResX=(B2*C1-B1*C2)/Det;
+        double ResY=(A1*C2-C1*A2)/Det;
         cout<<fixed<<setprecision(9)<<ResX<<' '<<ResY;
     }
 }
