@@ -34,12 +34,12 @@ struct UF
             w=-w;
         }
         Parent[RootA]=RootB;
-        Dist[RootA]=w+Dist[B]-Dist[A];
+        Dist[RootA]=Dist[B]-Dist[A]-w;
         Size[RootB]+=Size[RootA];
     }
     ll GetWeightGap(int A, int B)
     {
-        return Dist[A]-Dist[B];
+        return Dist[B]-Dist[A];
     }
 };
 int main()
