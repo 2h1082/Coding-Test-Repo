@@ -16,7 +16,7 @@ bool CheckPath(vector<int>& Map)
         
         if(PrevLevel-Map[j]==1) // 낮아지는 구간
         {
-            PrevCnt=1;
+            PrevLevel=Map[j];
             
             for(int k=0;k<L;++k)
             {
@@ -24,7 +24,6 @@ bool CheckPath(vector<int>& Map)
             }
             j+=L-1;
             PrevCnt=0;
-            PrevLevel=Map[j];
             continue;
         }
         if(PrevLevel-Map[j]==-1) // 높아지는 구간
@@ -32,8 +31,7 @@ bool CheckPath(vector<int>& Map)
             if(PrevCnt<L) return false;
 
             PrevCnt=1;
-            PrevLevel=Map[j];
-            continue;
+            ++PrevLevel;
         }
     }  
     return true;
