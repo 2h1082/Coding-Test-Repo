@@ -29,6 +29,7 @@ ll Solve(int L, int R)
                 D=min(D,Dist(Dot[i],Dot[j]));
             }
         }
+        sort(Dot.begin()+L,Dot.begin()+R+1,CmpY);
         return D;
     }
     
@@ -36,16 +37,14 @@ ll Solve(int L, int R)
     int MidX=Dot[Mid].x;
     ll D=min(Solve(L,Mid),Solve(Mid+1,R));
     
-    Tmp.clear();
-    for(int i=L;i<=R;++i) Tmp.push_back(Dot[i]);
-    
-    sort(Tmp.begin(),Tmp.end(),CmpY);
+    merge(Dot.begin()+L,Dot.begin()+Mid+1,Dot.begin()+Mid+1,Dot.begin()+R+1,Tmp.begin(),CmpY);
+    copy(Tmp.begin(),Tmp.begin()+n,Dot.begin()+L);
     
     vector<P> Strip;
     Strip.reserve(n);
-    for(auto& p : Tmp)
+    for(int i=L;i<=R;++i)
     {
-        if((ll)(p.x-MidX)*(p.x-MidX) < D) Strip.push_back(p);
+        if((ll)(Dot[i].x-MidX)*(Dot[i].x-MidX) < D) Strip.push_back(Dot[i]);
     }
     
     for(int i=0;i<Strip.size();++i)
