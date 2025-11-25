@@ -22,20 +22,20 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int N,K;
+    int N,K,Idx;
     cin>>N>>K;
     vector<Medal> Nation(N);
-    for(auto& n : Nation)
+    for(int i=0;i<N;++i)
     {
-        cin>>n.Num>>n.Gold>>n.Silver>>n.Bronze;
+        cin>>Nation[i].Num>>Nation[i].Gold>>Nation[i].Silver>>Nation[i].Bronze;
+        if(Nation[i].Num==K) Idx=i;
     }
-    sort(Nation.begin(),Nation.end(),greater<>());
-    int Rank=0;
-    for(int i=1;i<N;++i)
+    
+    int Rank=1;
+    for(int i=0;i<N;++i)
     {
-        if(Nation[i-1]==Nation[i]) continue;
-        Rank++;
-        if(Nation[i].Num==K) break;
+        if(i==Idx) continue;
+        if(Nation[i]>Nation[Idx]) Rank++;
     }
     cout<<Rank;
 }
