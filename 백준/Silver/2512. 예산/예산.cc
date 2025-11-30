@@ -32,8 +32,8 @@ int main()
     int L=0, R=MaxVal;
     while (L<R)
     {
-        int Mid = L + (R - L + 1) / 2;   
-        if (IsPossible(Num,Mid))     L=Mid;
+        int Mid=(L+R)/2 + 1;   
+        if (IsPossible(Num,Mid))         L=Mid;
         else                             R=Mid-1;
     }
     cout<<L;
