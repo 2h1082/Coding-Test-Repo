@@ -31,9 +31,8 @@ int main()
         for(int Cur=0;Cur<=9;++Cur)
         {
             int Cost=Cnt[Cur];
-            if(i-Cost<0)                 continue; // 불가능한 경우의 수 (만들 수 있는 수가 없음)
+            if(i-Cost<2)                 continue; // 불가능한 경우의 수 (만들 수 있는 수가 없음)
             if(Dp[i-Cost].empty())       continue; // 불가능한 경우의 수
-            if(i-Cost==0 && Cur==0)      continue; // 맨 앞의 수로 0 불가
 
             string Cand=Dp[i-Cost]+char(Cur+'0');
 
