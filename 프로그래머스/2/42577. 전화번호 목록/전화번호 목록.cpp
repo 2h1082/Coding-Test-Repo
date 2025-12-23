@@ -5,20 +5,13 @@ using namespace std;
 bool solution(vector<string> phone_book) {
     bool answer = true;
     
-    map<string,int> Num;
-    for(auto& s : phone_book) Num[s]++;
-    
-    for(auto& s : phone_book)
+    sort(phone_book.begin(),phone_book.end());
+    for(int i=1;i<phone_book.size();++i)
     {
-        string Cur;
-        for(int i=0;i<s.length()-1;++i)
+        if(phone_book[i].find(phone_book[i-1]) == 0)
         {
-            Cur+=s[i];
-            if(Num[Cur]>0)
-            {
-                answer=false;
-                break;
-            }
+            answer=false;
+            break;
         }
     }
     
