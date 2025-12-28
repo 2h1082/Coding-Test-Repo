@@ -1,18 +1,19 @@
-#include <string>
-#include <vector>
-#include <map>
+#include "bits/stdc++.h"
 using namespace std;
 
-int solution(vector<vector<string>> clothes) {
-    int answer = 1;
-    map<string,int> ClothCount;
-    for(int i=0;i<clothes.size();++i)
+int solution(vector<vector<string>> Cloth) 
+{
+    map<string,int> Cnt;
+    for(auto& C : Cloth)
     {
-        ++ClothCount[clothes[i][1]];
+        string Type=C[1];
+        Cnt[Type]++;
     }
-    for(auto it=ClothCount.begin();it!=ClothCount.end();++it)
+    int Ans=1;
+    for(auto& [Name, Count] : Cnt)
     {
-        answer*=(it->second+1);
+        Ans*=Count+1;
     }
-    return answer-1;
+    Ans--;
+    return Ans;
 }
