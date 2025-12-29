@@ -1,35 +1,27 @@
-#include <string>
-#include <vector>
-#include <queue>
-#include <algorithm>
+#include "bits/stdc++.h"
 
 using namespace std;
 
-int solution(vector<int> priorities, int location) {
-    int answer = 1;
-    queue<int> q;
-    for(int i=0;i<priorities.size();++i)
+int solution(vector<int> Prior, int Location) {
+    int Ans = 0;
+    queue<pair<int,int>> Q;
+    for(int i=0;i<Prior.size();++i) Q.push({Prior[i],i});
+    
+    vector<int> SortedPrior=Prior;
+    sort(SortedPrior.begin(),SortedPrior.end(),greater<>());
+    int SortedIdx=0;
+    while(!Q.empty())
     {
-        q.push(i);
-    }
-    auto Max=max_element(priorities.begin(),priorities.end());
-    while(!q.empty())
-    {
-        if(*Max==priorities[q.front()])
+        auto [P, Idx]=Q.front();
+        Q.pop();
+        if(P==SortedPrior[SortedIdx])
         {
-            if(location==q.front())
-            {
-                break;
-            }
-            priorities[q.front()]=0;
-            Max=max_element(priorities.begin(),priorities.end());
-            ++answer;
+            Ans++;
+            SortedIdx++;
+            if(Location==Idx) break;
         }
-        else
-        {
-            q.push(q.front());
-        }
-        q.pop();
+        else Q.push({P,Idx});
     }
-    return answer;
+    
+    return Ans;
 }
