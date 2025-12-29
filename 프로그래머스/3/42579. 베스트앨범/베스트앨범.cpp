@@ -1,32 +1,36 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-vector<int> solution(vector<string> genres, vector<int> plays) {
-    vector<int> answer;
-    map<string,int> PlayCount;
-    map<string,vector<pair<int,int>>>CountIdx;
-    for(int i=0;i<genres.size();i++)
+vector<int> solution(vector<string> Genres, vector<int> Plays) 
+{
+    int N=Plays.size();
+    map<string, int> TypeCnt;
+    map<string, vector<pair<int,int>>> SongInfo;
+    for(int i=0;i<N;++i)
     {
-        PlayCount[genres[i]]+=plays[i];
-        CountIdx[genres[i]].push_back({plays[i],i});
+        TypeCnt[Genres[i]]+=Plays[i];
+        SongInfo[Genres[i]].push_back({Plays[i],i});
     }
-    vector<pair<string,int>> S(PlayCount.begin(),PlayCount.end());
-    sort(S.begin(),S.end(),[&](auto& a,auto& b){
-        return a.second>b.second;
+    
+    vector<pair<string,int>> SortedType(TypeCnt.begin(),TypeCnt.end());
+    sort(SortedType.begin(),SortedType.end(),[](const auto& P1, const auto& P2){
+        return P1.second > P2.second;
     });
-    for(auto it=S.begin();it!=S.end();it++)
+    
+    vector<int> Ans;
+    for(auto& [Type, TotalCnt]:SortedType)
     {
-        int cnt=0;
-        string g=it->first;
-        sort(CountIdx[g].begin(),CountIdx[g].end(),[&](auto& a, auto& b){
-            if(a.first==b.first) return a.second<b.second;
-            return a.first>b.first;
+        sort(SongInfo[Type].begin(),SongInfo[Type].end(),[](const auto& P1, const auto& P2){
+            if(P1.first==P2.first) return P1.second < P2.second;
+            return P1.first > P2.first;
         });
-        for(int i=0;i<CountIdx[g].size()&&i<2;i++)
+        int Cnt=0;
+        for(auto& [PlayCnt, Idx]:SongInfo[Type])
         {
-            answer.push_back(CountIdx[g][i].second);
+            if(Cnt>=2) break;
+            Ans.push_back(Idx);
+            Cnt++;
         }
     }
-    return answer;
+    return Ans;
 }
