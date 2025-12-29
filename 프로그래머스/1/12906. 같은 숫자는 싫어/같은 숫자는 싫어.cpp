@@ -1,17 +1,14 @@
 #include "bits/stdc++.h"
-
 using namespace std;
 
-vector<int> solution(vector<int> arr) 
+vector<int> solution(vector<int> Arr) 
 {
-    vector<int> answer;
-
-    answer.push_back(arr[0]);
-    for(int& n : arr)
+    vector<int> Ans;
+    Ans.push_back(Arr[0]);
+    for(auto& a : Arr)
     {
-        if(n==answer.back()) continue;
-        answer.push_back(n);
+        if(Ans.back()==a) continue;
+        Ans.push_back(a);
     }
-
-    return answer;
+    return Ans;
 }
