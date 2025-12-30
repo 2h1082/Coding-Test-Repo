@@ -1,36 +1,29 @@
-#include <string>
-#include <queue>
-#include <iostream>
-
+#include "bits/stdc++.h"
 using namespace std;
 
-int solution(int bridge_length, int weight, vector<int> truck_weights) {
-    int answer = 0;
-    queue<pair<int, int>> Time;
-    int OnWeight=0;
-    
-    for(int i=0;i<truck_weights.size();i++)
+int solution(int BridgeLength, int Weight, vector<int> TruckWeights) 
+{
+    int N=TruckWeights.size(), Time=0, CurWeight=0;
+    queue<pair<int,int>> Q;
+    for(int i=0;i<N;++i)
     {
-        answer++;
-        if(answer-Time.front().second>=bridge_length) 
+        Time++;
+        
+        while(!Q.empty() && Time >= Q.front().second+BridgeLength)
         {
-            OnWeight-=Time.front().first;
-            Time.pop();
+            CurWeight-=Q.front().first;
+            Q.pop();
         }
-        while(OnWeight+truck_weights[i]>weight || Time.size()==bridge_length)
+        
+        while(!Q.empty() && CurWeight+TruckWeights[i] > Weight)
         {
-            cout<<"time:"<<answer<<" "<<"truck:"<<Time.front().second<<endl;
-            answer+=bridge_length-(answer-Time.front().second);
-            OnWeight-=Time.front().first;
-            Time.pop();   
+            CurWeight-=Q.front().first;
+            Time=Q.front().second+BridgeLength;
+            Q.pop();
         }
-        if(OnWeight+truck_weights[i]<=weight && Time.size()<bridge_length)
-        {
-            OnWeight+=truck_weights[i];
-            Time.push({truck_weights[i],answer});
-        }
+        Q.push({TruckWeights[i],Time});
+        CurWeight+=TruckWeights[i];
     }
-    if(!Time.empty()) answer+=bridge_length;
     
-    return answer;
+    return Q.back().second+BridgeLength;
 }
