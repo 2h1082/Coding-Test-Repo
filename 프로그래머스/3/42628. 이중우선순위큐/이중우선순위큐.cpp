@@ -2,28 +2,37 @@
 
 using namespace std;
 
-vector<int> solution(vector<string> operations) {
-    vector<int> answer(2,0);
-    multiset<int> DQ;
-    for(auto& op:operations)
+vector<int> solution(vector<string> Op) 
+{
+    vector<int> Ans(2,0);
+    multiset<int> S;
+    
+    for(auto& O : Op)
     {
-        if(op[0]=='I')
+        char op=O[0];
+        int Num=stoi(O.substr(2));
+        if(op=='I')
         {
-            int num=stoi(op.substr(2));
-            DQ.insert(num);
+            S.insert(Num);
         }
-        else if(op[0]=='D')
+        else if(op=='D' && !S.empty())
         {
-            if(DQ.empty()) continue;
-            if(op[2]=='1') DQ.erase(*prev(DQ.end()));
-            else if(op[2]=='-') DQ.erase(DQ.begin());
+            if(Num==1)
+            {
+                S.erase(prev(S.end()));
+            }
+            else if(Num==-1)
+            {
+                S.erase(S.begin());
+            }
         }
     }
-    if(!DQ.empty())
+    if(!S.empty())
     {
-        answer[0]=*prev(DQ.end());
-        answer[1]=*DQ.begin();
+        Ans[0]=*prev(S.end());
+        Ans[1]=*S.begin();
     }
     
-    return answer;
+    
+    return Ans;
 }
