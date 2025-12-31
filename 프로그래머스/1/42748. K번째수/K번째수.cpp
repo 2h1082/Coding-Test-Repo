@@ -4,12 +4,16 @@
 
 using namespace std;
 
-vector<int> solution(vector<int> array, vector<vector<int>> commands) {
-    vector<int> answer;
-    for(vector<int> v : commands){
-        vector<int> temp(array.begin()+v.at(0)-1,array.begin()+v.at(1));
-        sort(temp.begin(),temp.end());
-        answer.push_back(temp[v.at(2)-1]);
+vector<int> solution(vector<int> Array, vector<vector<int>> Commands) 
+{
+    vector<int> Ans;
+    for(auto& C : Commands)
+    {
+        int i=C[0], j=C[1], k=C[2];
+        vector<int> Temp(Array.begin()+i-1,Array.begin()+j);
+        sort(Temp.begin(),Temp.end());
+        Ans.push_back(Temp[k-1]);
     }
-    return answer;
+    
+    return Ans;
 }
