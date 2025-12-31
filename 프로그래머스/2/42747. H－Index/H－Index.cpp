@@ -1,24 +1,23 @@
-#include <string>
-#include <vector>
-#include <algorithm>
+#include "bits/stdc++.h"
 using namespace std;
 
-int solution(vector<int> citations) {
-    int answer = 0;
-    int h=0;
-    sort(citations.rbegin(),citations.rend());
-    for(int i=0;i<citations.size();++i)
+int solution(vector<int> Citations) {
+    int Ans = 0, H=0, N=Citations.size();
+    
+    // 거꾸로 내림차순 정렬
+    // 큰값부터 확인하는 것이 유리
+    sort(Citations.rbegin(),Citations.rend());
+    for(int i=0;i<N;++i)
     {
-        ++h;
-        if(h>citations[i])
+        ++H;
+        // 현재 인덱스의 인용 횟수가 H(현재 인용 횟수 이상의 논문 개수)보다 작으면 조건 만족하는 최댓값이니 바로 종료
+        if(Citations[i] < H)
         {
-            answer=h-1;
+            Ans=H-1;
             break;
         }
+        if(H==N && Citations[i] > H) Ans=H;
     }
-    if(h==citations.size() && citations.back()>h)
-    {
-        answer=h;
-    }
-    return answer;
+    
+    return Ans;
 }
