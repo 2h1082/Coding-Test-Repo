@@ -1,23 +1,17 @@
-#include <string>
-#include <vector>
-#include <algorithm>
-
+#include "bits/stdc++.h"
 using namespace std;
 
-string solution(vector<int> numbers) {
-    string answer = "";
-    vector<string> s;
-    for(int i:numbers)
-    {
-        s.push_back(to_string(i));
-    }
-    sort(s.begin(),s.end(),[](string a, string b){
-       return a+b>b+a; 
+string solution(vector<int> Numbers) {
+    string Ans = "";
+    int N=Numbers.size();
+    vector<string> Nums(N);
+    for(int i=0;i<N;++i) Nums[i]=to_string(Numbers[i]);
+    
+    sort(Nums.begin(),Nums.end(),[](const string& A, const string& B){
+        return A+B > B+A; // 앞에 붙었을 때, 수가 더 커지는 값이 앞에 있도록 정렬
     });
-    if(s[0]=="0") return "0";
-    for(string s1:s)
-    {
-        answer+=s1;
-    }
-    return answer;
+    if(Nums[0]=="0") return "0";
+    for(auto& n : Nums) Ans+=n;
+    
+    return Ans;
 }
