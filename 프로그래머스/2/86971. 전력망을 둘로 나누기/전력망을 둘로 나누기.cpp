@@ -1,54 +1,29 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-vector<vector<int>> graph;
-vector<bool> visited;
-
-int CountNodes(int node)
+vector<vector<int>> Graph;
+vector<int> ChildCnt;
+int Min=1e9;
+int DFS(int Cur, int Par, const int& N)
 {
-    visited[node]=true;
-    int count=1;
-    
-    for(int NextNode: graph[node])
+    for(int& Nxt : Graph[Cur])
     {
-        if(!visited[NextNode])
-        {
-            count+=CountNodes(NextNode);
-        }
+        if(Nxt==Par) continue;
+        
+        int NxtChildCnt=DFS(Nxt,Cur,N);
+        Min=min(Min,abs(N-2*NxtChildCnt));
+        ChildCnt[Cur]+=NxtChildCnt;
     }
-    return count;
+    return ChildCnt[Cur];
 }
-
-int solution(int n, vector<vector<int>> wires) {
-    int answer = n;
-    
-    graph.assign(n+1,vector<int>());
-    
-    for(vector<int> v : wires)
+int solution(int N, vector<vector<int>> Wires) {
+    Graph.resize(N+1);
+    for(auto& Edge : Wires)
     {
-        //간선 연결
-        graph[v[0]].push_back(v[1]);
-        graph[v[1]].push_back(v[0]);
+        Graph[Edge[0]].push_back(Edge[1]);
+        Graph[Edge[1]].push_back(Edge[0]);
     }
-    
-    for(vector<int> v : wires)
-    {
-        //간선 삭제
-        graph[v[0]].erase(remove(graph[v[0]].begin(),graph[v[0]].end(),v[1]),graph[v[0]].end());
-        graph[v[1]].erase(remove(graph[v[1]].begin(),graph[v[1]].end(),v[0]),graph[v[1]].end());
-        
-        //DFS로 한쪽 트리 노드 개수 구하기
-        visited.assign(n+1,false);
-        int NodeCount=CountNodes(v[0]);
-        int Abs=abs((n-NodeCount)-NodeCount);
-        answer=min(Abs,answer);
-        
-        //간선 다시 연결
-        graph[v[0]].push_back(v[1]);
-        graph[v[1]].push_back(v[0]);
-    }
-    
-    
-    return answer;
+    ChildCnt.assign(N+1,1);
+    DFS(1,0,N);
+    return Min;
 }
