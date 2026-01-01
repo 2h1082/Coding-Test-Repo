@@ -1,17 +1,15 @@
-#include <string>
-#include <vector>
-#include <algorithm>
-
+#include "bits/stdc++.h"
 using namespace std;
 
-int solution(vector<vector<int>> sizes) {
-    int max_w=0, max_h=0;
-    for(auto& size : sizes){
-        if(size[0]<size[1]){
-            swap(size[0],size[1]);
-        }
-        max_w=max(max_w,size[0]);
-        max_h=max(max_h,size[1]);
+int solution(vector<vector<int>> Sizes) 
+{
+    int W=0, H=0;
+    for(auto& Cur : Sizes)
+    {
+        if(Cur[0] < Cur[1]) swap(Cur[0],Cur[1]);
+        W=max(W,Cur[0]);
+        H=max(H,Cur[1]);
     }
-    return max_w*max_h;
+    
+    return W*H;
 }
