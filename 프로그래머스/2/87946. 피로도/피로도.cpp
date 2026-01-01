@@ -1,29 +1,27 @@
-#include <string>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
 
-int MaxCount=0;
-
-void VisitDungeon(int k, vector<vector<int>> dungeons, vector<bool> visit, int count)
+int Max=0, N=0;
+vector<bool> Used;
+void DFS(int Cnt, int Remain, vector<vector<int>>& D)
 {
-    MaxCount=max(MaxCount,count);
+    Max=max(Max,Cnt);
     
-    for(int i=0;i<dungeons.size();++i)
+    for(int i=0;i<N;++i)
     {
-        if(!visit[i]&&dungeons[i][0]<=k)
-        {
-            visit[i]=true;
-            VisitDungeon(k-dungeons[i][1],dungeons,visit,count+1);
-            visit[i]=false;
-        }
+        int MinStamina=D[i][0], Cost=D[i][1];
+        if(Used[i] || MinStamina > Remain || Remain < Cost) continue;
+        
+        Used[i]=true;
+        DFS(Cnt+1,Remain-Cost,D);
+        Used[i]=false;
     }
 }
-
-
-int solution(int k, vector<vector<int>> dungeons) {
-    vector<bool> visit(dungeons.size(),false);
-    VisitDungeon(k,dungeons,visit,0);
+int solution(int k, vector<vector<int>> Dungeons) 
+{
+    N=Dungeons.size();
+    Used.assign(N,false);
+    DFS(0,k,Dungeons);
     
-    return MaxCount;
+    return Max;
 }
