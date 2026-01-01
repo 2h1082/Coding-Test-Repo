@@ -1,20 +1,24 @@
-#include <string>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
 
-vector<int> solution(int brown, int yellow) {
-    vector<int> answer;
-    int height=1;
-    int width=yellow/height;
-    while((width+2)*2+height*2!=brown){
-        height++;
-        while(yellow%height!=0){
-            height++;
+vector<int> solution(int Brown, int Yellow) 
+{
+    vector<int> Ans(2,0);
+    int Total=Brown+Yellow;
+    int W=0;
+    for(int H=3;H<=sqrt(Total);++H)
+    {
+        if(!(Total%H)) 
+        {
+            W=Total/H;
+            if((W-2)*(H-2)==Yellow)
+            {
+                Ans[0]=W;
+                Ans[1]=H;
+                break;
+            }
         }
-        width=yellow/height;
     }
-    answer.push_back(width+2);
-    answer.push_back(height+2);
-    return answer;
+    
+    return Ans;
 }
