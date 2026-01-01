@@ -1,35 +1,42 @@
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <unordered_set>
-
+#include "bits/stdc++.h"
 using namespace std;
+using ll=long long;
 
-bool IsPrime(long long num)
+unordered_set<ll> Prime;
+vector<bool> Used;
+bool IsPrime(ll Num)
 {
-    if(num<2) return false;
-    if(num==2 || num==3) return true;
-    if(num%2==0 || num%3==0) return false;
+    if(Num<=1) return false;
+    if(Num<=3) return true;
+    if(Num%2==0 || Num%3==0) return false;
     
-    for(long long i=5;i*i<=num;i+=6)
+    for(ll i=5;i*i<=Num;i+=6)
     {
-        if(num%i==0||num%(i+2)==0) return false;
+        if(!(Num%i) || !(Num%(i+2))) return false;
     }
     return true;
 }
-int solution(string numbers) {
-    int answer = 0;
-    unordered_set<long long> visited;
-    sort(numbers.begin(),numbers.end());
-    do
+void DFS(string Cur, const string& Nums)
+{
+    if(!Cur.empty())
     {
-        string temp="";
-        for(char s : numbers)
-        {
-            if(IsPrime(s-'0')) visited.insert(s-'0');
-            temp+=s;
-            if(IsPrime(stoll(temp))) visited.insert(stoll(temp));
-        }
-    } while(next_permutation(numbers.begin(),numbers.end()));
-    return visited.size();
+        ll Num=stoll(Cur);
+        if(IsPrime(Num)) Prime.insert(Num);
+    }
+    
+    for(int i=0;i<Nums.size();++i)
+    {
+        if(Used[i]) continue;
+        Used[i]=true;
+        DFS(Cur+Nums[i],Nums);
+        Used[i]=false;
+    }
+   
+}
+int solution(string Nums) 
+{
+    Used.assign(Nums.size(),false);
+    DFS("",Nums);    
+    
+    return Prime.size();
 }
