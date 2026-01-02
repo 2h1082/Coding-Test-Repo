@@ -2,25 +2,24 @@
 
 using namespace std;
 
-int solution(string name) {
-    int answer = 0;
-    int n=name.length();
-    string temp(n,'A');
-    if(temp==name) return 0;
-    int Min=n-1;
-    for(int i=0;i<n;i++)
+int solution(string Name) {
+    int Ans=0, N=Name.size(), Min=N-1;
+    string Cur(Name.size(),'A');
+    if(Cur==Name) return 0;
+    
+    for(int i=0;i<N;++i)
     {
-        if(temp[i]!=name[i])
+        if(Cur[i]!=Name[i])
         {
-            int up=name[i]-'A';
-            int down=26-up;
-            answer+=min(up,down);
-            int next=i+1;
-            while(next<n&&name[next]=='A') next++;
-            int left=i;
-            int right=n-next;
-            Min=min(Min,left+right+min(left,right));
+            int Up=Name[i]-'A';
+            int Down=26-Up;
+            Ans+=min(Up,Down);
+            
+            int Nxt=i+1;
+            while(Nxt<N && Name[Nxt]=='A') ++Nxt;
+            int L=i, R=N-Nxt;
+            Min=min(Min,L+R+min(L,R));
         }
     }
-    return answer+Min;
+    return Ans+Min;
 }
