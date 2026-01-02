@@ -1,32 +1,37 @@
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <iostream>
+#include "bits/stdc++.h"
 using namespace std;
 
-int solution(int n, vector<int> lost, vector<int> reserve) {
-    int answer = n-lost.size();
-    sort(lost.begin(),lost.end());
-    sort(reserve.begin(),reserve.end());
-    for(int i=0;i<lost.size();i++){
-        for(int j=0;j<reserve.size();j++){
-            if(lost[i]==reserve[j]) {
-                reserve[j]=-2;
-                lost[i]=-2;
-                answer++;
+int solution(int N, vector<int> Lost, vector<int> Reserve) 
+{
+    int Ans=N-Lost.size();
+    sort(Lost.begin(),Lost.end());
+    sort(Reserve.begin(),Reserve.end());
+    for(int& l : Lost)
+    {
+        for(int& r : Reserve)
+        {
+            if(l==r)
+            {
+                l=-1;
+                r=-1;
+                ++Ans;
                 break;
             }
         }
     }
-    for(int i=0;i<lost.size();i++){
-        for(int j=0;j<reserve.size();j++){
-            if((lost[i]-1==reserve[j]) || (lost[i]==reserve[j]-1)){
-                lost[i]=-2;
-                reserve[j]=-2;
-                answer++;
+    for(int i=0;i<Lost.size();++i)
+    {
+        for(int j=0;j<Reserve.size();++j)
+        {
+            if(Lost[i]-1==Reserve[j] || Lost[i]+1==Reserve[j])
+            {
+                Reserve[j]=-1;
+                Lost[i]=-1;
+                ++Ans;
                 break;
             }
         }
     }
-    return answer;
+    
+    return Ans;
 }
