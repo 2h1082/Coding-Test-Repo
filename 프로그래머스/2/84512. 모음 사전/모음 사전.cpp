@@ -1,33 +1,28 @@
-#include <string>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
-
-int answer=0;
-bool find=false;
-
-void DFS(string CurString, string word)
-{
-    if(find || CurString.size()>5)
-    {
-        return;
-    }
-    if(word==CurString)
-    {
-        find=true;
-        return;
-    }
-    ++answer;
-    DFS(CurString+"A",word);
-    DFS(CurString+"E",word);
-    DFS(CurString+"I",word);
-    DFS(CurString+"O",word);
-    DFS(CurString+"U",word);
-}
 
 int solution(string word) 
 {
-    DFS("",word);
+    vector<int> Dist={780,155,30,5,0};
+    vector<char> Alpha={'A','E','I','O','U'};
+    int Cnt=0;
+    for(int i=0;i<word.size();++i)
+    {
+        if(word[i]!='A')
+        {
+            for(int j=0;j<5;++j)
+            {
+                if(word[i]==Alpha[j])
+                {
+                    Cnt+=(j+1) + j*Dist[i];
+                }
+            }
+        }
+        else
+        {
+            ++Cnt;
+        }
+    }
     
-    return answer;
+    return Cnt;
 }
