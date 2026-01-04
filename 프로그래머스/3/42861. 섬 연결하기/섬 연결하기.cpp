@@ -1,34 +1,38 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-int solution(int n, vector<vector<int>> costs) {
-    int answer = 0;
-    vector<vector<pair<int,int>>> path(n);
-    for(auto& cost:costs)
+int solution(int N, vector<vector<int>> Costs) 
+{
+    int Ans = 0;
+    // 그래프 구성
+    vector<vector<pair<int,int>>> Graph(N);
+    for(auto& Info : Costs)
     {
-        path[cost[0]].push_back({cost[1],cost[2]});
-        path[cost[1]].push_back({cost[0],cost[2]});
+        int U=Info[0], V=Info[1], W=Info[2];
+        Graph[U].push_back({V,W});
+        Graph[V].push_back({U,W});
     }
-    vector<bool> visited(n,false);
-    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<>> pq;
     
-    pq.push({0,0});
-    while(!pq.empty())
+    // 프림 알고리즘
+    priority_queue<pair<int,int>,vector<pair<int,int>>, greater<>> Q;
+    Q.push({0,0});
+    int Cnt=0;
+    vector<bool> Used(N,false);
+    while(!Q.empty() && Cnt < N-1)
     {
-        auto [cost,cur]=pq.top();
-        pq.pop();
+        auto [W, Cur]=Q.top();
+        Q.pop();
+        if(Used[Cur]) continue;
         
-        if(visited[cur]) continue;
-        visited[cur]=true;
-        answer+=cost;
-        for(auto& [next,ncost]:path[cur])
+        Ans+=W;
+        Used[Cur]=true;
+        for(auto& [Nxt, Cost] : Graph[Cur])
         {
-            if(!visited[next])
-            {
-                pq.push({ncost,next});
-            }
+            if(Used[Nxt]) continue;
+            
+            Q.push({Cost,Nxt});
         }
     }
-    return answer;
+    
+    return Ans;
 }
