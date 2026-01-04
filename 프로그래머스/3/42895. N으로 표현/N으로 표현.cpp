@@ -1,37 +1,37 @@
-#include <string>
-#include <vector>
-#include <unordered_set>
-
+#include "bits/stdc++.h"
 using namespace std;
 
-int solution(int N, int number) {
-    vector<unordered_set<int>> dp(9);
+int solution(int N, int Number) 
+{
+    vector<set<int>> Dp(9);
     
-    int concatenated=0;
-    for(int i=1;i<9;i++)
+    // 단순 이어붙여서 만드는 수 삽입
+    int Prev=0;
+    for(int i=1;i<9;++i)
     {
-        concatenated=concatenated*10+N;
-        dp[i].insert(concatenated);
+        Prev=Prev*10 + N;
+        Dp[i].insert(Prev);
     }
-    for(int i=1;i<9;i++)
+
+    // Dp 점화식 갱신
+    // - 낮은 횟수부터 차례로 생성 가능한 수 갱신
+    for(int i=1;i<9;++i)
     {
-        if(dp[i].count(number)) return i;
-        
         for(int j=1;j<i;++j)
         {
             int k=i-j;
-            for(int a:dp[j])
+            for(const int& a : Dp[j])
             {
-                for(int b:dp[k])
+                for(const int& b : Dp[k])
                 {
-                    dp[i].insert(a+b);
-                    dp[i].insert(a-b);
-                    dp[i].insert(a*b);
-                    if(b) dp[i].insert(a/b);
+                    Dp[i].insert(a+b);
+                    Dp[i].insert(a-b);
+                    Dp[i].insert(a*b);
+                    if(b) Dp[i].insert(a/b);
                 }
             }
         }
-        if(dp[i].count(number)) return i;
+        if(Dp[i].count(Number)) return i;
     }
     return -1;
 }
