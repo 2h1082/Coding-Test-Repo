@@ -1,22 +1,30 @@
 #include "bits/stdc++.h"
-
 using namespace std;
 
 int solution(vector<vector<int>> Tri) {
-    int Ans = 0;
-    int N= Tri.size();
-    vector<vector<int>> Dp(N, vector<int>(N,0));
-    Dp[0][0]=Tri[0][0];
-    for(int i=1;i<N;++i)
+    int N=Tri.size();
+    
+    // Dp 테이블 초기화
+    vector<vector<int>> Dp=Tri;
+    for(auto& R : Dp)
     {
-        auto& Cur=Tri[i];
-        int M=Cur.size();
-        for(int j=0;j<M;++j)
+        for(auto& C : R)
         {
-            if(j>0)     Dp[i][j]=max(Dp[i][j],Dp[i-1][j-1]+Cur[j]);
-            if(j<M-1)   Dp[i][j]=max(Dp[i][j],Dp[i-1][j]+Cur[j]);
+            C=0;
         }
     }
-    Ans=*max_element(Dp[N-1].begin(),Dp[N-1].end());
-    return Ans;
+    Dp[0][0]=Tri[0][0];
+    
+    // Dp 갱신
+    for(int i=1;i<N;++i)
+    {
+        int M=Dp[i].size();
+        for(int j=0;j<M;++j)
+        {
+            if(j>0)   Dp[i][j]=max(Dp[i][j],Dp[i-1][j-1]+Tri[i][j]);
+            if(j<M-1) Dp[i][j]=max(Dp[i][j],Dp[i-1][j]+Tri[i][j]);
+        }
+    }
+    
+    return *max_element(Dp[N-1].begin(),Dp[N-1].end());
 }
