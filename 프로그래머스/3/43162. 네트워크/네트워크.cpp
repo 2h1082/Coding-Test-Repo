@@ -1,27 +1,27 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-int solution(int n, vector<vector<int>> computers) {
-    int answer = 0;
-    vector<bool> visited(n,false);
-    function <void(int)> DFS=[&](int idx){
-        visited[idx]=true;
-        for(int i=0;i<n;i++)
-        {
-            if(!visited[i]&&computers[idx][i])
-            {
-                DFS(i);
-            }
-        }
-    };
-    for(int i=0;i<n;i++)
+vector<bool> Used;
+void DFS(int Cur, const vector<vector<int>>& Computers, const int& N)
+{
+    Used[Cur]=true;
+    for(int i=0;i<N;++i)
     {
-        if(!visited[i])
-        {
-            DFS(i);
-            answer++;
-        }
+        if(Used[i] || !Computers[Cur][i]) continue;
+        
+        DFS(i,Computers,N);
     }
-    return answer;
+}
+int solution(int N, vector<vector<int>> Computers) 
+{
+    int Ans = 0;
+    Used.assign(N,false);
+    
+    for(int i=0;i<N;++i)
+    {
+        if(Used[i]) continue;
+        DFS(i,Computers,N);
+        Ans++;
+    }
+    return Ans;
 }
