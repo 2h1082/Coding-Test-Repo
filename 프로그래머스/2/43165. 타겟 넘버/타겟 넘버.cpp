@@ -1,26 +1,20 @@
-#include <string>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
 
-int answer=0;
-
-void Sum(int index,vector<int> numbers, int target, int total)
+int Ans=0;
+void DFS(const vector<int>& Num, const int& Target, int Idx, int Cur)
 {
-    if(index==numbers.size())
+    if(Idx==Num.size())
     {
-        if(total==target)
-        {
-            ++answer;
-        }
+        Ans+=(Cur==Target);
         return;
     }
-    Sum(index+1,numbers,target,total+numbers[index]);
-    Sum(index+1,numbers,target,total-numbers[index]);
+    DFS(Num,Target,Idx+1,Cur+Num[Idx]);
+    DFS(Num,Target,Idx+1,Cur-Num[Idx]);
 }
-
-int solution(vector<int> numbers, int target) {
-    Sum(0,numbers,target,0);
-    return answer;
+int solution(vector<int> Numbers, int Target) 
+{
+    DFS(Numbers,Target,0,0);
+    return Ans;
 }
 
