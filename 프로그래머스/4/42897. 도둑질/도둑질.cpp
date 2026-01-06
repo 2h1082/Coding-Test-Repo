@@ -1,5 +1,4 @@
 #include "bits/stdc++.h"
-
 using namespace std;
 
 int RobHouse(const vector<int>& Money, int S, int E)
@@ -13,12 +12,9 @@ int RobHouse(const vector<int>& Money, int S, int E)
     }
     return Prev1;
 }
-int solution(vector<int> Money) {
-    int Ans = 0;
+int solution(vector<int> Money) 
+{
     int N=Money.size();
-    
-    int RobFirst=RobHouse(Money,0,N-2);
-    int RobLast=RobHouse(Money,1,N-1);
-    Ans=max(RobFirst,RobLast);
-    return Ans;
+    int Sel1=RobHouse(Money,0,N-2), Sel2=RobHouse(Money,1,N-1);
+    return max(Sel1,Sel2);
 }
