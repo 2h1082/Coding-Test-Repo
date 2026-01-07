@@ -1,38 +1,32 @@
 #include <bits/stdc++.h>
-
 using namespace std;
-bool CanConvert(string& s1, string& s2)
+
+bool CanConvert(string& S1, string& S2)
 {
-    int dif=0;
-    for(int i=0;i<s1.length();i++)
+    int Cnt=0;
+    for(int i=0;i<S1.size();++i)
     {
-        if(s1[i]!=s2[i]) dif++;
-        if(dif>1) return false;
+        if(S1[i]!=S2[i]) ++Cnt;
+        if(Cnt>1) return false;
     }
-    return dif==1;
+    return true;
 }
-int solution(string begin, string target, vector<string> words) {
-    vector<bool> visited(words.size(),false);
-    queue<pair<string,int>> q;
-    auto it=find(words.begin(),words.end(),target);
-    if(it==words.end()) return 0;
-    q.push({begin,0});
-    while(!q.empty())
+int solution(string Begin, string Target, vector<string> Words) 
+{
+    queue<pair<string,int>> Q;
+    Q.push({Begin,0});
+    auto It=find(Words.begin(),Words.end(),Target);
+    if(It==Words.end()) return 0;
+    
+    while(!Q.empty())
     {
-        string cur=q.front().first;
-        int count=q.front().second;
-        q.pop();
-        if(target==cur)
+        auto [Cur, Cnt]=Q.front();
+        Q.pop();
+        if(Cur==Target) return Cnt;
+        
+        for(auto& Nxt : Words)
         {
-            return count;
-        }
-        for(int i=0;i<words.size();i++)
-        {
-            if(!visited[i]&&CanConvert(words[i],cur))
-            {
-                visited[i]=true;
-                q.push({words[i],count+1});
-            }
+            if(CanConvert(Cur,Nxt)) Q.push({Nxt,Cnt+1});
         }
     }
     
