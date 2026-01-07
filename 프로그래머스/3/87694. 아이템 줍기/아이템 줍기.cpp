@@ -1,45 +1,45 @@
 #include "bits/stdc++.h"
 using namespace std;
 
-int dx[]={0,0,-1,1};
-int dy[]={-1,1,0,0};
-int solution(vector<vector<int>> Rectangle, int Sx, int Sy, int Ix, int Iy) {
-    int Ans = 0;
-    vector<vector<int>> Map(101, vector<int>(101,0)), Dist(101, vector<int>(101,-1));
-    for(auto& R : Rectangle)
+int Dx[]={0,0,-1,1};
+int Dy[]={-1,1,0,0};
+int solution(vector<vector<int>> Rectangle, int Sx, int Sy, int Ix, int Iy) 
+{
+    vector<vector<int>> Used(101,vector<int>(101,0)), Map(101,vector<int>(101,0));
+    
+    // 주어진 직사각형 테두리 기준 이용 가능 경로 맵 구성
+    for(auto Rect : Rectangle)
     {
-        int LowX= R[0]*2, LowY=R[1]*2, UpX=R[2]*2, UpY=R[3]*2;
-        for(int i=LowY;i<=UpY;++i)
+        int LeftX=Rect[0]*2, DownY=Rect[1]*2, RightX=Rect[2]*2, UpY=Rect[3]*2;
+        for(int i=DownY;i<=UpY;++i)
         {
-            for(int j=LowX;j<=UpX;++j)
+            for(int j=LeftX;j<=RightX;++j)
             {
-                if(Map[i][j]==-1) continue;
-                
-                if(i==LowY || i==UpY || j==LowX || j==UpX) Map[i][j]=1;
-                else                                       Map[i][j]=-1;
+                if(Map[i][j]==-1)                                continue;     // 다른 사각형의 내부 (건너뜀)
+                if(i==DownY || i==UpY || j==LeftX || j==RightX)  Map[i][j]=1;  // 내부에 포함되지 않는 테두리 
+                else                                             Map[i][j]=-1; // 사각형 내부는 따로 -1로 처리
             }
         }
     }
     
-    queue<pair<int,int>> q;
-    q.push({Sy*2,Sx*2});
-    Dist[Sy*2][Sx*2]=0;
-    
-    while(!q.empty())
+    queue<pair<int,int>> Q;
+    Used[Sy*2][Sx*2]=1;
+    Q.push({Sy*2, Sx*2});
+    while(!Q.empty())
     {
-        auto [Cy, Cx]=q.front();
-        q.pop();
-        if(Cy==Iy*2 && Cx==Ix*2) return Dist[Cy][Cx]/2;
+        auto [y, x] = Q.front();
+        Q.pop();
+        if(y==Iy*2 && x==Ix*2) return Used[y][x]/2;
         
         for(int i=0;i<4;++i)
         {
-            int Ny=Cy+dy[i], Nx=Cx+dx[i];
+            int Ny=y+Dy[i], Nx=x+Dx[i];
             if(Ny<0 || Ny>100 || Nx<0 || Nx>100) continue;
-            if(Map[Ny][Nx]!=1 || Dist[Ny][Nx]!=-1)  continue;
+            if(Used[Ny][Nx] || Map[Ny][Nx]!=1)   continue;
             
-            q.push({Ny,Nx});
-            Dist[Ny][Nx]=Dist[Cy][Cx]+1;
+            Q.push({Ny,Nx});
+            Used[Ny][Nx]=Used[y][x]+1;
         }
     }
-    return Ans;
+    return -1;
 }
