@@ -4,64 +4,66 @@ using namespace std;
 int Dx[]={0,0,-1,1};
 int Dy[]={-1,1,0,0};
 
-vector<pair<int,int>> Normalize(vector<pair<int,int>> Shape)
+void Normalize(vector<pair<int,int>>& Block)
 {
-    int MinX=100, MinY=100;
-    for(auto& P : Shape)
+    int MinX=1e9, MinY=1e9;
+    for(auto& [y,x] : Block)
     {
-        MinX=min(MinX,P.second);
-        MinY=min(MinY,P.first);
+        MinX=min(MinX,x);
+        MinY=min(MinY,y);
     }
-    for(int i=0;i<Shape.size();++i)
+    for(auto& [y,x] : Block)
     {
-        Shape[i].first-=MinY;
-        Shape[i].second-=MinX;        
+        y-=MinY;
+        x-=MinX;
     }
-    sort(Shape.begin(),Shape.end());
-    return Shape;
+    // 정렬 (정렬되어 있어야 올바른 비교 가능)
+    sort(Block.begin(),Block.end());
 }
-vector<pair<int,int>> Rotate(vector<pair<int,int>> Shape)
+void Rotate(vector<pair<int,int>>& Block)
 {
-    for(int i=0;i<Shape.size();++i)
+    for(auto& [y,x] : Block)
     {
-        int Temp=Shape[i].first;
-        Shape[i].first= -Shape[i].second;
-        Shape[i].second=Temp;
+        int Temp=y;
+        y=x;
+        x=-Temp;
     }
-    return Normalize(Shape);
+    Normalize(Block);
 }
-vector<pair<int,int>> BFS(vector<vector<int>>& Board, int Sx, int Sy, int Target, int Val)
+vector<pair<int,int>> BFS(vector<vector<int>>& Map, int Sx, int Sy, int Target, int Val)
 {
-    int N=Board.size();
-    queue<pair<int,int>> q;
-    vector<pair<int,int>> Ans;
-    q.push({Sy,Sx});
-    Board[Sy][Sx]=Val;
-    Ans.push_back({Sy,Sx});
+    int N=Map.size();
+    vector<pair<int,int>> Ans(1,{Sy,Sx});
     
-    while(!q.empty())
+    queue<pair<int,int>> Q;
+    Q.push({Sy,Sx});
+    Map[Sy][Sx]=Val;
+    
+    while(!Q.empty())
     {
-        auto [Cy, Cx]=q.front();
-        q.pop();
+        auto [Cy,Cx]=Q.front();
+        Q.pop();
         for(int i=0;i<4;++i)
         {
             int Ny=Cy+Dy[i], Nx=Cx+Dx[i];
             if(Ny<0 || Ny>=N || Nx<0 || Nx>=N) continue;
-            if(Board[Ny][Nx]!=Target) continue;
+            if(Map[Ny][Nx]!=Target)            continue;
             
-            q.push({Ny,Nx});
-            Board[Ny][Nx]=Val;
+            Q.push({Ny,Nx});
             Ans.push_back({Ny,Nx});
+            Map[Ny][Nx]=Val;
         }
     }
-    return Normalize(Ans);
+    
+    Normalize(Ans);
+    return Ans;
 }
 int solution(vector<vector<int>> Board, vector<vector<int>> Table) 
 {
     int N=Board.size();
-    vector<vector<pair<int,int>>> Blank, Block;
     
-    // 빈칸 모양 추출
+    vector<vector<pair<int,int>>> Blank, Block;
+    // 빈칸 모양 탐색
     for(int i=0;i<N;++i)
     {
         for(int j=0;j<N;++j)
@@ -69,7 +71,8 @@ int solution(vector<vector<int>> Board, vector<vector<int>> Table)
             if(!Board[i][j]) Blank.push_back(BFS(Board,j,i,0,1));
         }
     }
-    // 블록 모양 추출 (테이블)
+    
+    // 테이블의 블럭 모양 탐색
     for(int i=0;i<N;++i)
     {
         for(int j=0;j<N;++j)
@@ -78,30 +81,32 @@ int solution(vector<vector<int>> Board, vector<vector<int>> Table)
         }
     }
     
-    int Ans=0;
-    vector<bool> Used(Block.size(),false);
-    for(auto& B : Blank)
+    // 모양 대조하며 맞춰보기
+    vector<bool> Used(Blank.size(),false);
+    int Cnt=0, M=Block.size();
+    for(auto& Cur : Blank)
     {
-        bool bIsFound=false;
-        for(int i=0;i<Block.size();++i)
+        int CurSize=Cur.size();
+        for(int i=0;i<M;++i)
         {
-            if(Used[i] || B.size() != Block[i].size()) continue;
-            
-            vector<pair<int,int>> Cur=Block[i];
+            int BlockCnt=Block[i].size();
+            if(CurSize!=BlockCnt || Used[i]) continue;
+
+            bool bIsMatch=false;
             for(int d=0;d<4;++d)
             {
-                if(B == Cur)
+                if(Cur==Block[i])
                 {
-                    bIsFound=true;
+                    Cnt+=CurSize;
                     Used[i]=true;
-                    Ans+=Cur.size();
+                    bIsMatch=true;
                     break;
                 }
-                Cur=Rotate(Cur);
+                Rotate(Block[i]);
             }
-            if(bIsFound) break;
+            if(bIsMatch) break;
         }
     }
     
-    return Ans;
+    return Cnt;
 }
