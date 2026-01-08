@@ -1,26 +1,46 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-
-vector<string> solution(vector<vector<string>> tickets) {
-    vector<string> answer;
-    unordered_map<string, multiset<string>> graph;
-    for(auto ticket:tickets)
+unordered_map<string,vector<pair<string,bool>>> Graph;
+int N=0;
+vector<string> Res;
+bool DFS(string Cur, vector<string>& Ans)
+{
+    if(Ans.size()==N+1)
     {
-        graph[ticket[0]].insert(ticket[1]);
+        Res=Ans;
+        return true;
     }
-    function<void(string)> DFS=[&](string t)
+    
+    // 그래프 탐색
+    for(auto& [Nxt,bIsUsed] : Graph[Cur])
     {
-        while(!graph[t].empty())
-        {
-            string n=*graph[t].begin();
-            graph[t].erase(graph[t].begin());
-            DFS(n);
-        }
-        answer.push_back(t);
-    };
-    DFS("ICN");
-    reverse(answer.begin(),answer.end());
-    return answer;
+        if(bIsUsed) continue;
+        
+        bIsUsed=true;
+        Ans.push_back(Nxt);
+        if(DFS(Nxt,Ans)) return true;
+        Ans.pop_back();
+        bIsUsed=false;
+    }
+    return false;
+}
+vector<string> solution(vector<vector<string>> Tickets) 
+{
+    vector<string> Ans(1,"ICN");
+    
+    // 티켓 알파벳 순 정렬
+    sort(Tickets.begin(),Tickets.end());
+    N=Tickets.size();
+    
+    // 그래프 구성
+    for(auto& Cur : Tickets)
+    {
+        Graph[Cur[0]].push_back({Cur[1],false});
+    }
+    
+    // DFS
+    DFS("ICN",Ans);
+    
+    return Res;
 }
