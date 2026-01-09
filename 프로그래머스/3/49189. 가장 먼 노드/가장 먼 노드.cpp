@@ -1,40 +1,35 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-int solution(int n, vector<vector<int>> edge) {
-    int answer = 0;
-    vector<vector<int>> adj(n+1,vector<int>());
-    vector<int> dist(n+1,INT_MAX);
-    vector<bool> visited(n+1,false);
-    int Max=INT_MIN;
-    queue<pair<int,int>> q;
-    q.push({1,0});
-    for(auto e:edge)
+int solution(int N, vector<vector<int>> Edge) 
+{
+    int Ans=0;
+    vector<vector<int>> Graph(N);
+    for(auto& Cur : Edge)
     {
-        adj[e[0]].push_back(e[1]);
-        adj[e[1]].push_back(e[0]);
+        Graph[Cur[0]-1].push_back(Cur[1]-1);
+        Graph[Cur[1]-1].push_back(Cur[0]-1);
     }
-    while(!q.empty())
+    
+    // BFS
+    int Max=0;
+    vector<int> Dist(N,-1);
+    queue<int> Q;
+    Q.push(0);
+    Dist[0]=0;
+    while(!Q.empty())
     {
-        int cur=q.front().first;
-        int dis=q.front().second;
-        q.pop();
-        
-        dist[cur]=min(dist[cur],dis);
-        if(Max<dis) Max=dis;
-        
-        for(int i=0;i<adj[cur].size();i++)
+        auto Cur=Q.front();
+        Q.pop();
+        for(auto Nxt : Graph[Cur])
         {
-            int next=adj[cur][i];
-            if(!visited[next])
-            {
-                visited[next]=true;
-                q.push({next,dis+1});
-            }
+            if(Dist[Nxt]!=-1) continue;
+            
+            Dist[Nxt]=Dist[Cur]+1;
+            Max=max(Max,Dist[Nxt]);
+            Q.push(Nxt);
         }
     }
-    answer=count(dist.begin()+1,dist.end(),Max);
-    
-    return answer;
+    Ans=count(Dist.begin(),Dist.end(),Max);
+    return Ans;
 }
