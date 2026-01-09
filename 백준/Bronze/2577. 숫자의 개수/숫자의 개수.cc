@@ -1,21 +1,18 @@
-#include <iostream>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    int A, B, C;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int A,B,C;
     cin>>A>>B>>C;
     
-    int result=A*B*C;
-    string Nums=to_string(result);
-    vector<int> Count(10);
-    for(auto& c:Nums)
-    {
-        Count[c-'0']++;
-    }
-    for(int& N : Count)
-    {
-        cout<<N<<"\n";
-    }
+    int Ans=A*B*C;
+    string S=to_string(Ans);
+    
+    vector<int> Cnt(10,0);
+    for(auto& c : S) Cnt[c-'0']++;
+    for(int& a : Cnt) cout<<a<<'\n';
 }
