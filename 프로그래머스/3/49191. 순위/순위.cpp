@@ -1,38 +1,37 @@
-#include <string>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
 
-int solution(int n, vector<vector<int>> results) {
-    int answer = 0;
-    vector<vector<bool>> CanWin(n+1,vector<bool>(n+1,false));
-    //워셜 플로이드
-    for(auto& r : results)
-    {
-        CanWin[r[0]][r[1]]=true;
-    }
+int solution(int N, vector<vector<int>> Results) 
+{
+    int Ans = 0;
+    vector<vector<int>> Adj(N,vector<int>(N,0));
     
-    for(int i=1;i<=n;i++)
+    // 초기 그래프 구성
+    for(auto& Cur : Results)  Adj[Cur[0]-1][Cur[1]-1]=1;
+    
+    // 플로이드 워셜
+    for(int k=0;k<N;++k)
     {
-        for(int j=1;j<=n;j++)
+        for(int i=0;i<N;++i)
         {
-            for(int k=1;k<=n;k++)
+            for(int j=0;j<N;++j)
             {
-                if(CanWin[j][i]&&CanWin[i][k]) CanWin[j][k]=true;
+                if(!Adj[i][k] || !Adj[k][j]) continue;
+                Adj[i][j]=1;
             }
         }
     }
     
-    for(int i=1;i<=n;i++)
+    // 순위 확정 가능 여부 확인
+    for(int i=0;i<N;++i)
     {
-        int Win=0, Lose=0;
-        for(int j=1;j<=n;j++)
+        int Cnt=0;
+        for(int j=0;j<N;++j)
         {
-            if(CanWin[i][j]) Win++;
-            if(CanWin[j][i]) Lose++;
+            if(Adj[i][j] || Adj[j][i]) ++Cnt;
         }
-        if((Win+Lose)==n-1) answer++;
+        if(Cnt==N-1) ++Ans;
     }
     
-    return answer;
+    return Ans;
 }
