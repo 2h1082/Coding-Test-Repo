@@ -1,37 +1,34 @@
-#include <stack>
-#include <iostream>
-
+#include "bits/stdc++.h"
 using namespace std;
+
+bool bIsMatch(const string& S)
+{
+    stack<char> St;
+    for(auto& c : S)
+    {
+        if(c==')')
+        {
+            if(St.empty()) return false;
+            St.pop();
+        }
+        else if(c=='(')    St.push(c);
+    }
+    return St.empty();
+}
 int main()
 {
-    int T=0;
-    cin>>T;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
     
-    for(int i=0;i<T;++i)
+    int N;
+    cin>>N;
+    
+    while(N--)
     {
-        string Text;
-        cin>>Text;
+        string S;
+        cin>>S;
         
-        stack<char> s;
-        bool Valid=true;
-        for(auto& C : Text)
-        {
-            if(C=='(')
-            {
-                s.push(C);
-            }
-            else if(C==')')
-            {
-                if(s.empty()||s.top()!='(')
-                {
-                    Valid=false;
-                    break;
-                }
-                s.pop();
-            }
-        }
-        string Result="NO";
-        if(s.empty()&&Valid) Result="YES";
-        cout<<Result<<"\n";
+        if(bIsMatch(S)) cout<<"YES\n";
+        else            cout<<"NO\n";
     }
 }
