@@ -5,47 +5,35 @@ int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
-    cout.tie(NULL);
     
-    string L, R;
-    cin>>L;
+    int N;
+    string L,R;
+    cin>>L>>N;
     
-    int M;
-    cin>>M;
-    while(M--)
+    while(N--)
     {
-        char Com;
-        cin>>Com;
+        char Op;
+        cin>>Op;
         
-        if(Com=='L')
+        if(Op=='L' && !L.empty())
         {
-            if(!L.empty()) 
-            {
-                R+=L.back();
-                L.pop_back();
-            }
+            R+=L.back();
+            L.pop_back();
         }
-        else if(Com=='D')
+        else if(Op=='D' && !R.empty())
         {
-            if(!R.empty()) 
-            {
-                L+=R.back();
-                R.pop_back();
-            }
+            L+=R.back();
+            R.pop_back();
         }
-        else if(Com=='B')
+        else if(Op=='B' && !L.empty())
         {
-            if(!L.empty())
-            {
-                L.pop_back();
-            }
+            L.pop_back();
         }
-        else if(Com=='P')
+        else if(Op=='P')
         {
-            char Add;
-            cin>>Add;
-            
-            L+=Add;
+            char C;
+            cin>>C;
+            L+=C;
         }
     }
     cout<<L;
