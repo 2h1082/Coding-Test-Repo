@@ -1,54 +1,51 @@
-#include <iostream>
-#include <stack>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    int N=0;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int N;
     cin>>N;
-    vector<int> T(N);
-    vector<string> Result;
-    for(int i=0;i<N;++i)
-    {
-        cin>>T[i];
-    }
-    stack<int> s;
-    int Idx=0;
-    int Cur=1;
+        
+    vector<int> A(N,0);
+    vector<string> Ans;
+    
+    for(auto& a : A) cin>>a;
+    
+    int Idx=0, Cur=1;
+    stack<int> St;
     while(Idx<N)
     {
-        if(!s.empty())
+        if(!St.empty())
         {
-            if(s.top()==T[Idx])
+            if(St.top()==A[Idx])
             {
-                s.pop();
-                Result.push_back("-");
-                Idx++;
+                St.pop();
+                Ans.push_back("-");
+                ++Idx;
             }
-            else if(s.top()<T[Idx])
+            else if(St.top()<A[Idx])
             {
-                s.push(Cur++);
-                Result.push_back("+");
+                St.push(Cur++);
+                Ans.push_back("+");
             }
-            else
+            else 
             {
                 break;
             }
         }
         else
         {
-            s.push(Cur++);
-            Result.push_back("+");
+            St.push(Cur++);
+            Ans.push_back("+");
         }
     }
-    if(!s.empty())
+    if(!St.empty())
     {
-        Result.clear();
-        Result.push_back("NO");
+        Ans.clear();
+        Ans.push_back("NO");
     }
-    for(auto& C:Result)
-    {
-        cout<<C<<"\n";
-    }
+    for(auto& a : Ans) cout<<a<<'\n';
 }
