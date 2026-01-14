@@ -1,29 +1,29 @@
-#include <bits/stdc++.h>
-
+#include "bits/stdc++.h"
 using namespace std;
+using ll=long long;
 
 int main()
 {
-    int N=0;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int N;
     cin>>N;
-    vector<int> Num(N,0);
-    for(auto& n : Num)
+    
+    stack<pair<int,int>> St;
+    ll Cnt=0;
+    while(N--)
     {
-        cin>>n;
-    }
-    stack<pair<int,int>> st;
-    long long Cnt=0;
-    for(auto& n : Num)
-    {
-        int Same=1;
-        while(!st.empty()&&st.top().first<=n)
+        int H, Same=1;
+        cin>>H;
+        while(!St.empty() && St.top().first <= H)
         {
-            Cnt+=st.top().second;
-            if(st.top().first==n) Same+=st.top().second;
-            st.pop();
+            Cnt+=St.top().second;
+            if(St.top().first==H) Same+=St.top().second;
+            St.pop();
         }
-        if(!st.empty()) Cnt++;
-        st.push({n,Same});
+        if(!St.empty()) ++Cnt;
+        St.push({H,Same});
     }
     cout<<Cnt;
 }
