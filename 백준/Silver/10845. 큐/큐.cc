@@ -1,61 +1,53 @@
-#include <queue>
-#include <iostream>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    ios_base::sync_with_stdio(false);
+    ios::sync_with_stdio(false);
     cin.tie(NULL);
     
-    int N=0;
+    deque<int> Q;
+    int N;
     cin>>N;
-    queue<int> q;
-    for(int i=0;i<N;++i)
+    
+    while(N--)
     {
-        string Command;
-        cin>>Command;
-        if(Command=="push")
+        string S;
+        cin>>S;
+        
+        if(S=="push")
         {
-            int Num=0;
-            cin>>Num;
-            q.push(Num);
+            int X;
+            cin>>X;
+            Q.push_back(X);
         }
-        else if(Command=="pop")
+        else if(S=="pop")
         {
-            int Num=-1;
-            if(!q.empty())
+            if(Q.empty()) cout<<-1<<'\n';
+            else     
             {
-                Num=q.front();
-                q.pop();
+                cout<<Q.front()<<'\n';
+                Q.pop_front();
             }
-            cout<<Num<<"\n";
         }
-        else if(Command=="size")
+        else if(S=="size")
         {
-            cout<<q.size()<<"\n";
+            cout<<Q.size()<<'\n';
         }
-        else if(Command=="empty")
+        else if(S=="empty")
         {
-            int Result=q.empty()?1:0;
-            cout<<Result<<"\n";
+            if(Q.empty()) cout<<1<<'\n';
+            else          cout<<0<<'\n';
         }
-        else if(Command=="front")
+        else if(S=="front")
         {
-            int Num=-1;
-            if(!q.empty())
-            {
-                Num=q.front();
-            }
-            cout<<Num<<"\n";
+            if(Q.empty()) cout<<-1<<'\n';
+            else          cout<<Q.front()<<'\n';
         }
-        else if(Command=="back")
+        else if(S=="back")
         {
-            int Num=-1;
-            if(!q.empty())
-            {
-                Num=q.back();
-            }
-            cout<<Num<<"\n";
+            if(Q.empty()) cout<<-1<<'\n';
+            else          cout<<Q.back()<<'\n';
         }
     }
 }
