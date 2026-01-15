@@ -1,26 +1,21 @@
-#include <iostream>
-#include <queue>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    ios_base::sync_with_stdio(false);
+    ios::sync_with_stdio(false);
     cin.tie(NULL);
     
-    int N=0;
+    int N;
     cin>>N;
     
-    queue<int> q;
-    for(int i=1;i<=N;++i)
+    queue<int> Q;
+    for(int i=1;i<=N;++i) Q.push(i);
+    while(Q.size()!=1)
     {
-        q.push(i);
+        Q.pop();
+        Q.push(Q.front());
+        Q.pop();
     }
-    while(q.size()>1)
-    {
-        q.pop();
-        int Cur=q.front();
-        q.push(Cur);
-        q.pop();
-    }
-    cout<<q.front();
+    cout<<Q.front();
 }
