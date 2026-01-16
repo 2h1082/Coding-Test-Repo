@@ -1,53 +1,45 @@
-#include <iostream>
-#include <deque>
-#include <sstream>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    ios_base::sync_with_stdio(false);
+    ios::sync_with_stdio(false);
     cin.tie(NULL);
-    int T=0;
+    
+    int T;
     cin>>T;
+    
     while(T--)
     {
-        string Command,P;
-        int N=0;
-        deque<int> dq;
-        cin>>Command>>N>>P;
-        P=P.substr(1,P.length()-2);
-        stringstream ss(P);
+        string P, S;
+        int N;
+        cin>>P>>N>>S;
+        
+        deque<int> Q;
         string Temp;
+        S=S.substr(1,S.length()-2);
+        stringstream ss(S);
         while(getline(ss,Temp,','))
         {
-            if(!Temp.empty())
-            {
-                dq.push_back(stoi(Temp));
-            }
+            if(!Temp.empty()) Q.push_back(stoi(Temp));
         }
-        bool bIsReverse=false;
-        bool bIsError=false;
-        for(auto& C : Command)
+        
+        bool bIsReverse=false, bIsError=false;
+        for(auto& c : P)
         {
-            if(C=='R')
+            if(c=='R')
             {
                 bIsReverse=!bIsReverse;
             }
-            else if(C=='D')
+            else if(c=='D') 
             {
-                if(dq.empty())
+                if(Q.empty())
                 {
                     bIsError=true;
                     break;
-                } 
-                else if(bIsReverse)
-                {
-                    dq.pop_back();
                 }
-                else
-                {
-                    dq.pop_front();
-                }
+                if(bIsReverse) Q.pop_back();
+                else           Q.pop_front();
             }
         }
         if(bIsError)
@@ -55,24 +47,23 @@ int main()
             cout<<"error\n";
             continue;
         }
-        cout<<"[";
-        
-        if(!dq.empty())
+        cout<<'[';
+        if(!Q.empty())
         {
             if(bIsReverse)
             {
-                cout<<dq.back();
-                for(auto it=dq.rbegin()+1;it!=dq.rend();++it)
+                cout<<Q.back();
+                for(auto It=Q.rbegin()+1;It!=Q.rend();++It)
                 {
-                    cout<<","<<*it;
+                    cout<<','<<*It;
                 }
             }
             else
             {
-                cout<<dq.front();
-                for(auto it=dq.begin()+1;it!=dq.end();++it)
+                cout<<Q.front();
+                for(auto It=Q.begin()+1;It!=Q.end();++It)
                 {
-                    cout<<","<<*it;
+                    cout<<','<<*It;
                 }
             }
         }
