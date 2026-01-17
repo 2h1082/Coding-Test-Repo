@@ -9,20 +9,17 @@ int main()
     string S;
     cin>>S;
     
-    stack<int> St;
+    stack<char> St;
     int Cnt=0;
-    char Prev=' ';
-    for(auto& c : S)
+    for(int i=0;i<S.length();++i)
     {
-        if(c=='(') St.push(c);
-        else if(!St.empty())
+        if(S[i]=='(')                       St.push(S[i]);
+        else if(S[i]==')' && !St.empty())
         {
             St.pop();
-            if (Prev=='(') Cnt+=St.size(); // 레이저 절단면
-            else           Cnt++;          // 레이저에 잘리고 남은 마지막 조각
+            if(S[i-1]=='(')    Cnt+=St.size();
+            else               ++Cnt;
         }
-        Prev=c;
     }
-    
     cout<<Cnt;
 }
