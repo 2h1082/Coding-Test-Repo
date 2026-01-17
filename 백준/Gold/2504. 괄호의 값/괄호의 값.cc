@@ -9,46 +9,43 @@ int main()
     string S;
     cin>>S;
     
-    int Total=0, Part=1;
     stack<char> St;
-    for(int i=0;i<S.length();++i)
+    int Mul=1, Ans=0;
+    for(int i=0;i<S.length();i++)
     {
         if(S[i]=='(')
         {
-            Part*=2;
+            Mul*=2;
             St.push(S[i]);
         }
-        else if (S[i]=='[')
+        else if(S[i]=='[')
         {
-            Part*=3;
+            Mul*=3;
             St.push(S[i]);
         }
-        else if(!St.empty())
+        else if (S[i]==')')
         {
-            if(S[i]==')' && St.top()=='(')
+            if (St.empty() || St.top()!='(')
             {
-                if (S[i-1]=='(') Total+=Part;
-                St.pop();
-                Part/=2;
-            }
-            else if(S[i]==']' && St.top()=='[')
-            {
-                if (S[i-1]=='[') Total+=Part;
-                St.pop();
-                Part/=3;
-            }
-            else
-            {
-                Total=0;
+                Ans=0;
                 break;
             }
+            if (S[i-1]=='(') Ans+=Mul;
+            St.pop();
+            Mul/=2;
         }
-        else
+        else if (S[i]==']')
         {
-            Total=0;
-            break;
+            if (St.empty() || St.top()!='[')
+            {
+                Ans=0;
+                break;
+            }
+            if (S[i-1]=='[') Ans+=Mul;
+            St.pop();
+            Mul/=3;
         }
     }
-    if(!St.empty()) Total=0;
-    cout<<Total;
+    if (!St.empty()) Ans=0;
+    cout<<Ans;
 }
