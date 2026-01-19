@@ -1,42 +1,39 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    int N=0, K=0;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int N,K;
     cin>>N>>K;
-    queue<pair<int,int>> q;
-    q.push({N,0});
-    vector<bool> Visited(2000001);
-    int Second=0;
-    while(!q.empty())
+    
+    queue<int> Q;
+    vector<int> Used(200001,0);
+    Used[N]=1;
+    Q.push(N);
+    while(!Q.empty())
     {
-        int Cur=q.front().first;
-        int Time=q.front().second;
-        q.pop();
-        if(Cur==K)
+        int Cur=Q.front();
+        Q.pop();
+        int Minus=Cur-1, Plus=Cur+1, Mul=Cur*2;
+        if(Minus>=0 && !Used[Minus])
         {
-            Second=Time;
-            break;
+            Used[Minus]=Used[Cur]+1;
+            Q.push(Minus);
         }
-        int NextTime=Time+1;
-        if(!Visited[Cur-1]&&Cur-1>=0)
+        if(Plus<100001 && !Used[Plus])
         {
-            q.push({Cur-1,NextTime});
-            Visited[Cur-1]=true;
+            Used[Plus]=Used[Cur]+1;
+            Q.push(Plus);
         }
-        if(!Visited[Cur+1]&&Cur+1<=200000)
+        if(Mul<200001 && !Used[Mul])
         {
-            q.push({Cur+1,NextTime});
-            Visited[Cur+1]=true;
+            Used[Mul]=Used[Cur]+1;
+            Q.push(Mul);
         }
-        if(!Visited[Cur*2]&&Cur*2<=200000)
-        {
-            q.push({Cur*2,NextTime});
-            Visited[Cur*2]=true;
-        }
+        if(Minus==K || Plus==K || Mul==K) break;
     }
-    cout<<Second;
+    cout<<Used[K]-1;
 }
