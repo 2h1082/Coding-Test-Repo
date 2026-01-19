@@ -1,47 +1,34 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-
+#include "bits/stdc++.h"
 using namespace std;
-int dx[4]={0,0,-1,1};
-int dy[4]={-1,1,0,0};
+
+int dx[]={0,0,-1,1};
+int dy[]={-1,1,0,0};
 int main()
 {
-    ios_base::sync_with_stdio(false);
+    ios::sync_with_stdio(false);
     cin.tie(NULL);
-    int N=0,M=0;
-    cin>>N>>M;
     
-    vector<string> Maze(N);
-    for(int i=0;i<N;++i)
+    int N,M;
+    cin>>N>>M;
+    vector<string> Map(N);
+    vector<vector<int>> Used(N,vector<int>(M,0));
+    for(auto& r : Map) cin>>r;
+    
+    queue<pair<int,int>> Q;
+    Used[0][0]=1;
+    Q.push({0,0});
+    while(!Q.empty())
     {
-        cin>>Maze[i];
-    }
-    queue<vector<int>> q;
-    vector<vector<bool>> Visited(N,vector<bool>(M,false));
-    q.push({0,0,1});
-    int Result=0;
-    while(!q.empty())
-    {
-        int y=q.front()[0];
-        int x=q.front()[1];
-        int Count=q.front()[2];
-        q.pop();
-        if(y==N-1&&x==M-1)
-        {
-            Result=Count;
-            break;
-        } 
+        auto [Cy,Cx]=Q.front();
+        Q.pop();
         for(int i=0;i<4;++i)
         {
-            int ny=y+dy[i];
-            int nx=x+dx[i];
-            if(ny>=0&&ny<N&&nx>=0&&nx<M&&!Visited[ny][nx]&&Maze[ny][nx]=='1')
-            {
-                q.push({ny,nx,Count+1});
-                Visited[ny][nx]=true;
-            }
+            int Ny=Cy+dy[i], Nx=Cx+dx[i];
+            if(Ny<0 || Ny>=N || Nx<0 || Nx>=M || Used[Ny][Nx] || Map[Ny][Nx]=='0') continue;
+            Q.push({Ny,Nx});
+            Used[Ny][Nx]=Used[Cy][Cx]+1;
+            if(Ny==N-1 && Nx==M-1) break;
         }
     }
-    cout<<Result;
+    cout<<Used[N-1][M-1];
 }
