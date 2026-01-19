@@ -1,66 +1,54 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-
+#include "bits/stdc++.h"
 using namespace std;
 
-int dx[4]={0,0,-1,1};
-int dy[4]={-1,1,0,0};
+int dy[]={-1,1,0,0};
+int dx[]={0,0,-1,1};
+vector<vector<int>> Map, Used;
 int main()
 {
-    int M,N;
-    cin>>M>>N;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
     
-    queue<vector<int>> q;
-    vector<vector<int>> Box(N,vector<int>(M));
-    int Green=0;
+    int N,M;
+    cin>>M>>N;
+    Map.assign(N,vector<int>(M,0));
+    Used.assign(N,vector<int>(M,0));
+    
+    queue<pair<int,int>> Q;
+    int Green=0, Max=0;
     for(int i=0;i<N;++i)
     {
-        for(int j=0;j<M;++j)
+        for(int j=0;j<M;++j) 
         {
-            cin>>Box[i][j];
-            if(Box[i][j]==1)
+            cin>>Map[i][j];
+            if(Map[i][j]==1) 
             {
-                q.push({i,j,0});
+                Q.push({i,j});
+                Used[i][j]=1;
             }
-            else if(Box[i][j]==0)
-            {
-                Green++;
-            }
+            else if(!Map[i][j]) ++Green;
         }
     }
     if(!Green)
     {
-        cout<<"0";
+        cout<<0;
         return 0;
     }
-    int MaxCount=0;
-    while(!q.empty())
+    
+    while(!Q.empty())
     {
-        int CurY=q.front()[0];
-        int CurX=q.front()[1];
-        int CurDayCount=q.front()[2];
-        MaxCount=max(MaxCount,CurDayCount);
-        q.pop();
+        auto [Cy,Cx]=Q.front();
+        Q.pop();
         for(int i=0;i<4;++i)
         {
-            int NextX=CurX+dx[i];
-            int NextY=CurY+dy[i];
-            if(NextX>=0&&NextX<M&&NextY>=0&&NextY<N
-              &&Box[NextY][NextX]==0)
-            {
-                q.push({NextY,NextX,CurDayCount+1});
-                Green--;
-                Box[NextY][NextX]=1;
-            }
+            int Ny=Cy+dy[i], Nx=Cx+dx[i];
+            if(Ny<0 || Ny>=N || Nx<0 || Nx>=M || Used[Ny][Nx] || Map[Ny][Nx]) continue;
+            Q.push({Ny,Nx});
+            Used[Ny][Nx]=Used[Cy][Cx]+1;
+            Max=max(Max,Used[Ny][Nx]);
+            --Green;
         }
     }
-    if(Green)
-    {
-        cout<<"-1 ";
-    }
-    else
-    {
-        cout<<MaxCount;
-    }
+    if(Green) cout<<-1;
+    else      cout<<Max-1;
 }
