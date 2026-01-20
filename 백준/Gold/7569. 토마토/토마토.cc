@@ -1,73 +1,55 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-
+#include "bits/stdc++.h"
 using namespace std;
-int dx[6]={0,0,-1,1,0,0};
-int dy[6]={-1,1,0,0,0,0};
-int dz[6]={0,0,0,0,-1,1};
-int MaxDay=0;
 
+int dx[]={0,0,-1,1,0,0};
+int dy[]={-1,1,0,0,0,0};
+int dz[]={0,0,0,0,-1,1};
 int main()
 {
-    int N,M,H;  
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int M,N,H, Green=0;
     cin>>M>>N>>H;
-    vector<vector<vector<int>>> Box(N,vector<vector<int>>(M,vector<int>(H,0)));
-    int Green=0;
-    queue<vector<int>> q;
-    for(int k=0;k<H;++k)
+    vector<vector<vector<int>>> Box(H,vector<vector<int>>(N,vector<int>(M,0))), Dist(H,vector<vector<int>>(N,vector<int>(M,-1)));
+    queue<tuple<int,int,int>> Q;
+    for(int h=0;h<H;++h)
     {
         for(int i=0;i<N;++i)
         {
             for(int j=0;j<M;++j)
             {
-                cin>>Box[i][j][k];
-                if(Box[i][j][k]==0)
+                cin>>Box[h][i][j];
+                if(!Box[h][i][j])        ++Green;
+                else if(Box[h][i][j]==1) 
                 {
-                    Green++;
+                    Q.push({h,i,j});
+                    Dist[h][i][j]=0;
                 }
-                else if(Box[i][j][k]==1)
-                {
-                    q.push({j,i,k,0});
-                }
-            }
-        }
-    }
-    if(!Green)
-    {
-        cout<<"0";
-        return 0;
-    }
-
-    while (!q.empty())
-    {
-        int CurX=q.front()[0];
-        int CurY=q.front()[1];
-        int CurZ=q.front()[2];
-        int CurDayCount=q.front()[3];
-        MaxDay=max(MaxDay,CurDayCount);
-        q.pop();
-        for(int i=0;i<6;++i)
-        {
-            int NextX=CurX+dx[i];
-            int NextY=CurY+dy[i];
-            int NextZ=CurZ+dz[i];
-            if(NextX>=0&&NextX<M&&NextY>=0&&NextY<N&&NextZ>=0&&NextZ<H
-               &&Box[NextY][NextX][NextZ]==0)
-            {
-                q.push({NextX,NextY,NextZ,CurDayCount+1});
-                Box[NextY][NextX][NextZ]=1;
-                Green--;
             }
         }
     }
     
-    if(Green>0)
+    int Max=0;
+    if(!Green)
     {
-        cout<<"-1";
+        cout<<0;
+        return 0;
     }
-    else
+    while(!Q.empty())
     {
-        cout<<MaxDay;
+        auto [Cz,Cy,Cx]=Q.front();
+        Q.pop();
+        for(int i=0;i<6;++i)
+        {
+            int Nz=Cz+dz[i], Ny=Cy+dy[i], Nx=Cx+dx[i];
+            if(Nz<0 || Nz>=H || Ny<0 || Ny>=N || Nx<0 || Nx>=M || Box[Nz][Ny][Nx] || Dist[Nz][Ny][Nx]!=-1) continue;
+            Dist[Nz][Ny][Nx]=Dist[Cz][Cy][Cx]+1;
+            Max=max(Max,Dist[Nz][Ny][Nx]);
+            Q.push({Nz,Ny,Nx});
+            --Green;
+        }
     }
+    if(Green) cout<<-1;
+    else      cout<<Max;
 }
