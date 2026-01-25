@@ -1,45 +1,44 @@
-#include <iostream>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
-int Count=0;
-void DFS(vector<int>& Graph, vector<int>& Visited, int Idx)
+
+int Cnt=0;
+void DFS(int Cur, vector<int>& Used, vector<int>& Graph)
 {
-    Visited[Idx]=1;
-    int Next = Graph[Idx];
-    if(Visited[Next]==1) 
+    Used[Cur]=1;
+    int Nxt=Graph[Cur];
+    if(!Used[Nxt]) DFS(Nxt,Used,Graph);
+    else if(Used[Nxt]==1) 
     {
-        for(int i=Next;i!=Idx;i=Graph[i])
+        for(int i=Nxt;i!=Cur;i=Graph[i]) 
         {
-            if(Visited[i]==1) Count--;
+            if(Used[i]==1) --Cnt;
         }
-        Count--;
+        --Cnt;
     }
-    if(Visited[Next]==0) DFS(Graph,Visited,Next);
-    Visited[Idx]=2;
+    Used[Cur]=2;
 }
 int main()
 {
-    int T=0;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int T;
     cin>>T;
     while(T--)
     {
-        int N=0;
+        int N;
         cin>>N;
+        
+        Cnt=N;
         vector<int> Graph(N+1,0);
-        vector<int> Visited(N+1,0); // 0: Unvisited, 1: Current Path, 2: Visited
+        vector<int> Used(N+1,0);  // 0 : 미방문, 1 : 현재 경로에서 방문, 2 : 이미 방문
+        for(int i=1;i<=N;++i) cin>>Graph[i];
+        
         for(int i=1;i<=N;++i)
         {
-            cin>>Graph[i];
+            if(Used[i]) continue;
+            DFS(i,Used,Graph);
         }
-        Count=N;
-        for(int i=1;i<=N;++i)
-        {
-            if(!Visited[i])
-            {
-                DFS(Graph,Visited,i);
-            }
-        }
-        cout<<Count<<"\n";
+        cout<<Cnt<<'\n';
     }
 }
