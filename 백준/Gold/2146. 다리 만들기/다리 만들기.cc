@@ -20,15 +20,15 @@ void LabelingIsland(int Sy, int Sx, int Id, queue<tuple<int,int,int>>& CandQ)
             if(Ny<0 || Ny>=N || Nx<0 || Nx>=N || IslandId[Ny][Nx]) continue;
             if(!Map[Ny][Nx]) // 바다에 인접한 해안 블록 (다리 시작점 후보군)
             {
-                if(Dist[Cy][Cx]!=1e9) continue;
-                CandQ.push({Cy,Cx,Id});
-                Dist[Cy][Cx]=0;
+                if(Dist[Ny][Nx]!=1e9) continue;
+                CandQ.push({Ny,Nx,Id});
+                Dist[Ny][Nx]=1;
             }
             else
             {
                 Q.push({Ny,Nx});
-                IslandId[Ny][Nx]=Id;
             }
+            IslandId[Ny][Nx]=Id;
         }
     }
 }
@@ -75,10 +75,12 @@ int main()
             if(Map[Ny][Nx])
             {
                 Ans=min(Ans,Dist[Cy][Cx]);
+                continue;
             }
             if(Dist[Ny][Nx]!=1e9)
             {
                 Ans=min(Ans,Dist[Ny][Nx]+Dist[Cy][Cx]);
+                continue;
             }
             IslandId[Ny][Nx]=CurId;
             Dist[Ny][Nx]=Dist[Cy][Cx]+1;
