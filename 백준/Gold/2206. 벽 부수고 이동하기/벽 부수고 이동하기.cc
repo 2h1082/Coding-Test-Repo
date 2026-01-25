@@ -1,54 +1,45 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <climits>
-
+#include "bits/stdc++.h"
 using namespace std;
-int dx[4]={0,0,-1,1};
-int dy[4]={-1,1,0,0};
+
+int dy[]={-1,1,0,0};
+int dx[]={0,0,-1,1};
 int main()
 {
-    int N=0,M=0;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int N,M;
     cin>>N>>M;
     vector<string> Map(N);
-    for(auto& R : Map)
+    vector<vector<vector<int>>> Dist(N,vector<vector<int>>(M,vector<int>(2,1e9)));
+    for(auto& s : Map) cin>>s;
+    
+    Dist[0][0][0]=Dist[0][0][1]=1;
+    queue<tuple<int,int,int>> Q;
+    Q.push({0,0,1}); // y, x, Break Opportunity Count
+    while(!Q.empty())
     {
-        cin>>R;
-    }
-    queue<vector<int>> q;
-    vector<vector<vector<bool>>> Visited(N,vector<vector<bool>>(M,vector<bool>(2,false)));
-    q.push({0,0,1,1}); //x, y, Count, CanBreakWallCount
-    Visited[0][0][1]=true;
-    while(!q.empty())
-    {
-        int X=q.front()[0];
-        int Y=q.front()[1];
-        int CurCount=q.front()[2];
-        int WallCount=q.front()[3];
-        q.pop();
-        if(X==M-1&&Y==N-1)
-        {
-            cout<<CurCount;
-            return 0;
-        }
+        auto [Cy,Cx,Cnt]=Q.front();
+        Q.pop();
         for(int i=0;i<4;++i)
         {
-            int NextX=X+dx[i];
-            int NextY=Y+dy[i];
-            if(NextX>=0&&NextX<M&&NextY>=0&&NextY<N)
+            int Ny=Cy+dy[i], Nx=Cx+dx[i], NxtCnt=Cnt;
+            if(Ny<0 || Ny>=N || Nx<0 || Nx>=M) continue;
+            if(Map[Ny][Nx]=='1' && Cnt>0)
             {
-                if(Map[NextY][NextX]=='1'&&WallCount>0&&!Visited[NextY][NextX][WallCount-1])
-                {
-                    Visited[NextY][NextX][WallCount-1]=true;
-                    q.push({NextX,NextY,CurCount+1,WallCount-1});
-                }
-                else if(Map[NextY][NextX]=='0'&&!Visited[NextY][NextX][WallCount])
-                {
-                    Visited[NextY][NextX][WallCount]=true;
-                    q.push({NextX,NextY,CurCount+1,WallCount});
-                }
+                if(Dist[Ny][Nx][0]!=1e9) continue;
+                Dist[Ny][Nx][0]=Dist[Cy][Cx][Cnt]+1;
+                Q.push({Ny,Nx,0});
+            }
+            else if(Map[Ny][Nx]=='0')
+            {
+                if(Dist[Ny][Nx][Cnt]!=1e9) continue;
+                Dist[Ny][Nx][Cnt]=Dist[Cy][Cx][Cnt]+1;
+                Q.push({Ny,Nx,Cnt});
             }
         }
     }
-    cout<<"-1";
+    int Ans=min(Dist[N-1][M-1][0],Dist[N-1][M-1][1]);
+    if(Ans==1e9) cout<<-1;
+    else         cout<<Ans;
 }
