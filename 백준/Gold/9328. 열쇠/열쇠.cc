@@ -39,46 +39,40 @@ int main()
         cin>>K;
         vector<bool> Keys(26,false);
         if(K!="0") for(auto& k : K) Keys[k-'a']=true;
-        queue<pair<int,int>> DoorQ;
-        while(1)
+        vector<queue<pair<int,int>>> DoorQ(26);
+        
+        while(!Q.empty())
         {
-            bool bFoundNewKey=false;
-            while(!DoorQ.empty())
+            auto [Cy,Cx]=Q.front();
+            Q.pop();
+            char Cell=Map[Cy][Cx];
+            if(Cell=='$')                   ++Ans;
+            else if(Cell>='A' && Cell<='Z')
             {
-                Q.push(DoorQ.front());
-                DoorQ.pop();
-            }
-            while(!Q.empty())
-            {
-                auto [Cy,Cx]=Q.front();
-                Q.pop();
-                char Cell=Map[Cy][Cx];
-                if(Cell=='$')                   ++Ans;
-                else if(Cell>='A' && Cell<='Z')
+                int KeyIdx=Cell-'A';
+                if(!Keys[KeyIdx])
                 {
-                    if(!Keys[Cell-'A'])
-                    {
-                        DoorQ.push({Cy,Cx});
-                        continue;
-                    }
-                }
-                else if(Cell>='a' && Cell<='z') 
-                {
-                    if(!Keys[Cell-'a'])
-                    {
-                        Keys[Cell-'a']=true;
-                        bFoundNewKey=true;
-                    }
-                }
-                for(int i=0;i<4;++i)
-                {
-                    int Ny=Cy+dy[i], Nx=Cx+dx[i];
-                    if(Ny<0 || Ny>=H || Nx<0 || Nx>=W || Used[Ny][Nx] || Map[Ny][Nx]=='*') continue;
-                    Used[Ny][Nx]=true;
-                    Q.push({Ny,Nx});
+                    DoorQ[KeyIdx].push({Cy,Cx});
+                    continue;
                 }
             }
-            if(!bFoundNewKey) break;
+            else if(Cell>='a' && Cell<='z') 
+            {
+                int KeyIdx=Cell-'a';
+                Keys[KeyIdx]=true;
+                while(!DoorQ[KeyIdx].empty())
+                {
+                    Q.push(DoorQ[KeyIdx].front());
+                    DoorQ[KeyIdx].pop();
+                }
+            }
+            for(int i=0;i<4;++i)
+            {
+                int Ny=Cy+dy[i], Nx=Cx+dx[i];
+                if(Ny<0 || Ny>=H || Nx<0 || Nx>=W || Used[Ny][Nx] || Map[Ny][Nx]=='*') continue;
+                Used[Ny][Nx]=true;
+                Q.push({Ny,Nx});
+            }
         }
         cout<<Ans<<'\n';
     }
