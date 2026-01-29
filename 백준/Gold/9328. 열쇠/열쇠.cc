@@ -1,94 +1,85 @@
-#include <bits/stdc++.h>
-
+#include "bits/stdc++.h"
 using namespace std;
-int dx[4]={0,0,-1,1};
-int dy[4]={-1,1,0,0};
-int H=0, W=0;
 
+int dy[]={-1,1,0,0};
+int dx[]={0,0,-1,1};
 int main()
 {
-    int T=0;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int T;
     cin>>T;
+    
     while(T--)
     {
+        int H,W,Ans=0;
         cin>>H>>W;
+        
         vector<string> Map(H);
-        queue<pair<int,int>> q;
-        int DocCount=0;
-        vector<vector<bool>> Visited(H,vector<bool>(W,false));
-        for(int r=0;r<H;++r)
+        vector<vector<bool>> Used(H,vector<bool>(W,false));
+        queue<pair<int,int>> Q;
+        for(int i=0;i<H;++i)  cin>>Map[i];
+        
+        // 건물 밖에서 진입 가능한 곳들 시작지점으로 큐 삽입
+        for(int i=0;i<H;++i)
         {
-            cin>>Map[r];
-        }
-        for(int r=0;r<H;++r)
-        {
-            for(int c=0;c<W;++c)
+            for(int j=0;j<W;++j)
             {
-                if((r==0||r==H-1||c==0||c==W-1)&&Map[r][c]!='*')
+                if((i==0 || i==H-1 || j==0 || j==W-1) && Map[i][j]!='*')
                 {
-                    q.push({r,c});
-                    Visited[r][c]=true;
+                    Q.push({i,j});
+                    Used[i][j]=true;
                 }
             }
         }
-        vector<bool> HaveKey(26,false);
-        string Keys;
-        cin>>Keys;
-        if(Keys!="0")
-        {
-            for(auto& K : Keys)
-            {
-                HaveKey[K-'a']=true;
-            }
-        }
+        
+        // 보유 중인 키 확인
+        string K;
+        cin>>K;
+        vector<bool> Keys(26,false);
+        if(K!="0") for(auto& k : K) Keys[k-'a']=true;
         queue<pair<int,int>> DoorQ;
         while(1)
         {
-            bool bHaveNewKey=false;
+            bool bFoundNewKey=false;
             while(!DoorQ.empty())
             {
-                q.push(DoorQ.front());
+                Q.push(DoorQ.front());
                 DoorQ.pop();
             }
-            while(!q.empty())
+            while(!Q.empty())
             {
-                auto [y, x] = q.front();
-                q.pop();
-                char Cell=Map[y][x];
-                if(Cell=='$')
+                auto [Cy,Cx]=Q.front();
+                Q.pop();
+                char Cell=Map[Cy][Cx];
+                if(Cell=='$')                   ++Ans;
+                else if(Cell>='A' && Cell<='Z')
                 {
-                    DocCount++;
-                }
-                else if(Cell>='A'&&Cell<='Z')
-                {
-                    if(!HaveKey[Cell-'A'])
+                    if(!Keys[Cell-'A'])
                     {
-                        DoorQ.push({y,x});
+                        DoorQ.push({Cy,Cx});
                         continue;
                     }
                 }
-                else if(Cell>='a'&&Cell<='z')
+                else if(Cell>='a' && Cell<='z') 
                 {
-                    if(!HaveKey[Cell-'a'])
+                    if(!Keys[Cell-'a'])
                     {
-                        HaveKey[Cell-'a']=true;
-                        bHaveNewKey=true;
+                        Keys[Cell-'a']=true;
+                        bFoundNewKey=true;
                     }
                 }
                 for(int i=0;i<4;++i)
                 {
-                    int NextY=y+dy[i];
-                    int NextX=x+dx[i];
-                    if(NextY>=0&&NextY<H&&NextX>=0&&NextX<W&&!Visited[NextY][NextX]&&Map[NextY][NextX]!='*')
-                    {
-                        q.push({NextY,NextX});
-                        Visited[NextY][NextX]=true;
-                    }
+                    int Ny=Cy+dy[i], Nx=Cx+dx[i];
+                    if(Ny<0 || Ny>=H || Nx<0 || Nx>=W || Used[Ny][Nx] || Map[Ny][Nx]=='*') continue;
+                    Used[Ny][Nx]=true;
+                    Q.push({Ny,Nx});
                 }
             }
-            
-            if(!bHaveNewKey) break;
+            if(!bFoundNewKey) break;
         }
-        cout<<DocCount<<"\n";
+        cout<<Ans<<'\n';
     }
 }
