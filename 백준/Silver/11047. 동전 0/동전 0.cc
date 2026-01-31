@@ -1,29 +1,20 @@
-#include <iostream>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    ios_base::sync_with_stdio(false);
+    ios::sync_with_stdio(false);
     cin.tie(NULL);
     
-    int N=0,K=0;
+    int N,K;
     cin>>N>>K;
-    vector<int> V(N);
+    vector<int> A(N,0);
+    for(int i=N-1;i>=0;--i) cin>>A[i];
+    int Cnt=0;
     for(int i=0;i<N;++i)
     {
-        cin>>V[i];
+        Cnt+=K/A[i];
+        K%=A[i];
     }
-    int Count=0;
-    for(int i=N-1;i>=0;--i)
-    {
-        int Cur=K/V[i];
-        Count+=Cur;
-        if(Cur>0)
-        {
-            K%=V[i];
-            if(K==0) break;
-        }
-    }
-    cout<<Count;
+    cout<<Cnt;
 }
