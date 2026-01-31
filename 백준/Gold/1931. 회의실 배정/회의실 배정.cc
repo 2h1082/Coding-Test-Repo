@@ -1,31 +1,27 @@
-#include <iostream>
-#include <queue>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    int N=0;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int N;
     cin>>N;
-    priority_queue<vector<int>,vector<vector<int>>, greater<>> q;
-    while(N--)
+    vector<pair<int,int>> T(N);
+    for(auto& [S,E]:T) cin>>S>>E;
+    sort(T.begin(),T.end(),[](const auto& P1, const auto& P2){
+        if(P1.second==P2.second) return P1.first < P2.first;
+        return P1.second < P2.second;
+    });
+    int Ans=0, Cur=0;
+    for(const auto& [S, E] : T)
     {
-        int Start=0, End=0;
-        cin>>Start>>End;
-        q.push({End,Start});
-    }
-    int Count=0;
-    int PrevEnd=0;
-    while(!q.empty())
-    {
-        int CurEnd=q.top()[0];
-        int CurStart=q.top()[1];
-        q.pop();
-        if(PrevEnd<=CurStart)
+        if(Cur <= S)
         {
-            PrevEnd=CurEnd;
-            Count++;
+            Cur=E;
+            ++Ans;
         }
     }
-    cout<<Count;
+    cout<<Ans;
 }
