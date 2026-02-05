@@ -1,28 +1,25 @@
-#include <iostream>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    int T=0;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int T;
     cin>>T;
-    vector<int> V(T);
-    int Max=0;
-    for(int i=0;i<T;++i)
-    {
-        cin>>V[i];
-        Max=max(V[i],Max);
-    }
-    vector<int> Dp(Max+1);
+    vector<int> Dp(12,1e9);
     Dp[1]=1;
     Dp[2]=2;
     Dp[3]=4;
-    for(int i=4;i<Dp.size();++i)
+    for(int i=4;i<=11;++i)
     {
-        Dp[i]=Dp[i-3]+Dp[i-2]+Dp[i-1];
+        Dp[i]=Dp[i-1]+Dp[i-2]+Dp[i-3];
     }
-    for(int i=0;i<T;++i)
+    while(T--)
     {
-        cout<<Dp[V[i]]<<"\n";
+        int N;
+        cin>>N;
+        cout<<Dp[N]<<'\n';
     }
 }
