@@ -1,27 +1,24 @@
-#include <iostream>
-#include <sstream>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    string Text;
-    cin>>Text;
-    stringstream ss(Text);
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    string In;
+    cin>>In;
+    
+    stringstream ss(In);
     int Num=0, Sum=0;
+    char Op;
     bool bIsMinus=false;
-    char T;
     ss>>Sum;
-    while(ss>>T>>Num)
+    while(ss>>Op>>Num)
     {
-        if(T=='-') bIsMinus=true;
-        if(bIsMinus)
-        {
-            Sum-=Num;
-        }
-        else
-        {
-            Sum+=Num;
-        }
+        if(Op=='-')  bIsMinus=true;
+        if(bIsMinus) Sum-=Num;
+        else         Sum+=Num;
     }
     cout<<Sum;
 }
