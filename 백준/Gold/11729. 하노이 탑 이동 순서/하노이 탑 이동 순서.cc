@@ -1,37 +1,26 @@
-#include <iostream>
-#include <queue>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
 
-vector<pair<int,int>> l;
-
-int Hanoi(int start, int temp, int end, int n)
+int N;
+vector<pair<int,int>> Ans;
+void Move(int From, int Temp, int To, int Num)
 {
-    if (n==1)
+    if(Num==1)
     {
-        l.push_back({start,end});
-        return 1;
+        Ans.push_back({From,To});
+        return;
     }
-    int count=0;
-    count+=Hanoi(start,end,temp,n-1);
-    l.push_back({start,end});
-    count++;
-    return count+Hanoi(temp,start,end,n-1);
+    Move(From,To,Temp,Num-1);
+    Ans.push_back({From,To});
+    Move(Temp,From,To,Num-1);
 }
-
 int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
-    cout.tie(NULL);
     
-    int n;
-    cin>>n;
-    cout<<Hanoi(1,2,3,n)<<"\n";
-    for (auto a:l)
-    {
-        cout<<a.first<<" "<<a.second<<"\n";
-    }
-    return 0;
+    cin>>N;
+    Move(1,2,3,N);
+    cout<<Ans.size()<<'\n';
+    for(auto [F,T] : Ans) cout<<F<<' '<<T<<'\n';
 }
