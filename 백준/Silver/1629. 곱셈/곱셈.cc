@@ -1,28 +1,21 @@
-#include <iostream>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
-int Power(int& A, int B, int& C)
+using ll=long long;
+
+int A,B,C;
+int Mul(int A, int B)
 {
-    if(B==1)
-    {
-        return A%C;
-    }
-    long long Num=Power(A,B/2,C);
-    Num=Num*Num%C;
-    if(B%2)
-    {
-        return Num*A%C;
-    }
-    else
-    {
-        return Num;
-    }
+    if(B==1) return A%C;
+    ll Half=Mul(A,B/2)%C, Ans=Half*Half%C;
+    
+    if(B%2) return Ans*A%C;
+    else    return Ans;
 }
 int main()
 {
-    int A,B,C;
-    cin>>A>>B>>C;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
     
-    cout<<Power(A,B,C);
+    cin>>A>>B>>C;
+    cout<<Mul(A,B);
 }
