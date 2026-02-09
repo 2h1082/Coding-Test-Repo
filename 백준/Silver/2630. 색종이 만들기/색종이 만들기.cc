@@ -1,49 +1,56 @@
-#include <vector>
-#include <iostream>
-
+#include "bits/stdc++.h"
 using namespace std;
-int ResultW=0,ResultB=0;
-void Divide(vector<vector<int>>& P,int X, int Y,int N)
+
+int N;
+vector<vector<int>> A;
+vector<int> Cnt(2,0);
+void Count(int R, int C, int Size)
 {
-    int Pivot=P[Y][X];
+    int Base=A[R][C];
+    if(Size==1)
+    {
+        ++Cnt[Base];
+        return;
+    }
     bool bShouldDivide=false;
-    for(int i=0;i<N;++i)
+    for(int i=R;i<R+Size;++i)
     {
-        for(int j=0;j<N;++j)
+        for(int j=C;j<C+Size;++j)
         {
-            if(P[Y+i][X+j]!=Pivot)
-            {
-                bShouldDivide=true;
-                break;
-            }
+            if(Base==A[i][j]) continue;
+            bShouldDivide=true;
+            break;
         }
+        if(bShouldDivide) break;
     }
-    if(bShouldDivide&&N!=1)
+    if(!bShouldDivide)
     {
-        int Offset=N/2;
-        Divide(P,X,Y,Offset);
-        Divide(P,X,Y+Offset,Offset);
-        Divide(P,X+Offset,Y,Offset);
-        Divide(P,X+Offset,Y+Offset,Offset);
+        ++Cnt[Base];
+        return;
     }
-    else
+    int NxtSize=Size/2;
+    for(int i=0;i<Size;i+=NxtSize)
     {
-        if(Pivot) ResultB++;
-        else      ResultW++;
+        for(int j=0;j<Size;j+=NxtSize)
+        {
+            Count(R+i,C+j,NxtSize);
+        }
     }
 }
 int main()
 {
-    int N=0;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
     cin>>N;
-    vector<vector<int>> P(N,vector<int>(N));
+    A.assign(N,vector<int>(N,0));
     for(int i=0;i<N;++i)
     {
         for(int j=0;j<N;++j)
         {
-            cin>>P[i][j];
+            cin>>A[i][j];
         }
     }
-    Divide(P,0,0,N);
-    cout<<ResultW<<"\n"<<ResultB;
+    Count(0,0,N);
+    for(int c : Cnt) cout<<c<<'\n';
 }
