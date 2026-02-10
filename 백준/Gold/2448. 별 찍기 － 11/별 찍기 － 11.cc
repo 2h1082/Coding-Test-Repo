@@ -1,43 +1,35 @@
-#include <iostream>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
-int Len=0;
-vector<string> Stars;
-void PrintStar(int N, int Row, int Col)
+
+vector<string> Ans;
+void Print(int R, int C, int Size)
 {
-    if(N==3)
+    if(Size==3)
     {
-        Stars[Row][Col]='*';
-        Stars[Row+1][Col-1]='*';
-        Stars[Row+1][Col+1]='*';
-        Stars[Row+2][Col-2]='*';
-        Stars[Row+2][Col-1]='*';
-        Stars[Row+2][Col]='*';
-        Stars[Row+2][Col+1]='*';
-        Stars[Row+2][Col+2]='*';
+        Ans[R][C]=Ans[R+1][C-1]=Ans[R+1][C+1]=Ans[R+2][C-2]=Ans[R+2][C-1]=Ans[R+2][C]=Ans[R+2][C+1]=Ans[R+2][C+2]='*';
         return;
     }
-    PrintStar(N/2,Row,Col);
-    PrintStar(N/2,Row+N/2,Col-(N/2));
-    PrintStar(N/2,Row+N/2,Col+(N/2));
+    int NxtSize=Size/2;
+    Print(R,C,NxtSize);
+    Print(R+NxtSize,C-NxtSize,NxtSize);
+    Print(R+NxtSize,C+NxtSize,NxtSize);
 }
 int main()
 {
-    ios_base::sync_with_stdio(false);
+    ios::sync_with_stdio(false);
     cin.tie(NULL);
     
     int N=0;
     cin>>N;
-    Len=2*N-1;
-    Stars.assign(N,string(Len,' '));
-    PrintStar(N,0,Len/2);
-    for(auto& S : Stars)
+    int Len=2*N-1;
+    Ans.assign(N,string(Len,' '));
+    Print(0,Len/2,N);
+    for(auto& r : Ans)
     {
-        for(auto& C : S)
+        for(auto& c : r)
         {
-            cout<<C;
+            cout<<c;
         }
-        cout<<"\n";
+        cout<<'\n';
     }
 }
