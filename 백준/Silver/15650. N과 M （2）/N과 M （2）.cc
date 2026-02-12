@@ -1,33 +1,28 @@
-#include <iostream>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
-int N=0,M=0;
-vector<int> Nums;
-void DFS(int Index, int Count)
+
+int N,M;
+void DFS(int Cur, vector<int>& A)
 {
-    if(Count==M)
+    if(A.size()==M)
     {
-        for (auto& Num:Nums)
-        {
-            cout<<Num<<" ";
-        }
-        cout<<"\n";
+        for(int a : A) cout<<a<<' ';
+        cout<<'\n';
         return;
     }
-    for(int i=Index;i<=N;++i)
+    for(int i=Cur+1;i<=N;++i)
     {
-        Nums.push_back(i);
-        DFS(i+1,Count+1);
-        Nums.pop_back();
+        A.push_back(i);
+        DFS(i,A);
+        A.pop_back();
     }
 }
 int main()
 {
-    ios_base::sync_with_stdio(false);
+    ios::sync_with_stdio(false);
     cin.tie(NULL);
     
     cin>>N>>M;
-    Nums.reserve(M);
-    DFS(1,0);
+    vector<int> Ans;
+    DFS(0,Ans);
 }
