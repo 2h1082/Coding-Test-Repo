@@ -1,46 +1,38 @@
-#include <algorithm>
-#include <iostream>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
-int N=0,M=0;
-vector<int> NumsIndex;
-vector<int> NumArr;
-vector<bool> Visited;
-void DFS(int Count)
+
+int N,M;
+vector<int> A;
+vector<bool> Used;
+void DFS(vector<int>& Ans)
 {
-    if(Count==M)
+    if(Ans.size()==M)
     {
-        for(auto& Num :NumsIndex)
-        {
-            cout<<Num<<" ";
-        }
-        cout<<"\n";
+        for(int& a : Ans) cout<<a<<' ';
+        cout<<'\n';
         return;
     }
     for(int i=0;i<N;++i)
     {
-        if(Visited[i]) continue;
-        NumsIndex.push_back(NumArr[i]);
-        Visited[i]=true;
-        DFS(Count+1);
-        NumsIndex.pop_back();
-        Visited[i]=false;
+        if(Used[i]) continue;
+        Used[i]=true;
+        Ans.push_back(A[i]);
+        DFS(Ans);
+        Used[i]=false;
+        Ans.pop_back();
     }
 }
 int main()
 {
-    ios_base::sync_with_stdio(false);
+    ios::sync_with_stdio(false);
     cin.tie(NULL);
     
     cin>>N>>M;
-    NumsIndex.reserve(M);
-    NumArr.assign(N,0);
-    Visited.assign(N,false);
-    for(int i=0;i<N;++i)
-    {
-        cin>>NumArr[i];
-    }
-    sort(NumArr.begin(),NumArr.end());
-    DFS(0);
+    A.assign(N,0);
+    Used.assign(N,false);
+    for(auto& a : A) cin>>a;
+    sort(A.begin(),A.end());
+    
+    vector<int> Ans;
+    DFS(Ans);
 }
