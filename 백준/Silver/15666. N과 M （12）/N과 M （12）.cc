@@ -1,43 +1,35 @@
-#include <iostream>
-#include <vector>
-#include <map>
-#include <algorithm>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int N,M;
-vector<int> Nums;
-vector<int> Result;
-map<int,int> StartCount;
-void DFS(int Count)
+vector<int> A;
+void DFS(vector<int>& Ans, int Cur)
 {
-    if(Count==M)
+    if(Ans.size()==M)
     {
-        for(auto& Num : Result)
-        {
-            cout<<Num<<" ";
-        }
-        cout<<"\n";
+        for(auto& a : Ans) cout<<a<<' ';
+        cout<<'\n';
         return;
     }
-    for(int i=0;i<N;++i)
+    for(int i=Cur;i<N;++i)
     {
-        if(i>0&&Nums[i-1]==Nums[i]&&StartCount[Nums[i-1]]
-            || (!Result.empty() && Result.back()>Nums[i])) continue;
-        Result.push_back(Nums[i]);
-        StartCount[Nums[i]]++;
-        DFS(Count+1);
-        Result.pop_back();
+        Ans.push_back(A[i]);
+        DFS(Ans,i);
+        Ans.pop_back();
     }
 }
 int main()
 {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
     cin>>N>>M;
-    Nums.assign(N,0);
-    Result.reserve(N);
-    for(int i=0;i<N;++i)
-    {
-        cin>>Nums[i];
-    }
-    sort(Nums.begin(),Nums.end());
-    DFS(0);
+    A.assign(N,0);
+    for(auto& a : A) cin>>a;
+    sort(A.begin(),A.end());
+    A.erase(unique(A.begin(),A.end()),A.end());
+    N=A.size();
+    
+    vector<int> Ans;
+    DFS(Ans, 0);
 }
