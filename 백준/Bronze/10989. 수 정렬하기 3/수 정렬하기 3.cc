@@ -1,22 +1,23 @@
-#include <iostream>
-#include <algorithm>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    int N=0;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int N;
     cin>>N;
-    vector<int> Nums(10001,0);
+    vector<int> A(10001,0);
     for(int i=0;i<N;++i)
     {
-        int Num=0;
+        int Num;
         cin>>Num;
-        Nums[Num]++;
+        ++A[Num];
     }
-    for(int i=1;i<10001;++i)
+    for(int i=1;i<10001;++i) 
     {
-        if(Nums[i]==0) continue;
-        for(int j=0;j<Nums[i];++j) cout<<i<<"\n";
+        if(!A[i]) continue;
+        for(int j=0;j<A[i];++j) cout<<i<<'\n';
     }
 }
