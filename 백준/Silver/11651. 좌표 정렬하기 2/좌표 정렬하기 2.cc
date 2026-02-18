@@ -1,27 +1,15 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    ios_base::sync_with_stdio(false);
+    ios::sync_with_stdio(false);
     cin.tie(NULL);
     
-    int N=0;
+    int N;
     cin>>N;
-    
-    vector<vector<int>> Point(N,vector<int>(2));
-    for(int i=0;i<N;++i)
-    {
-        cin>>Point[i][0]>>Point[i][1];
-    }
-    sort(Point.begin(),Point.end(),[&](const vector<int>& a, const vector<int>& b){
-        if(a[1]!=b[1]) return a[1]<b[1];
-        return a[0]<b[0];
-    });
-    for(auto& P : Point)
-    {
-        cout<<P[0]<<" "<<P[1]<<"\n";
-    }
+    vector<pair<int,int>> A(N);
+    for(auto& [y,x]:A) cin>>x>>y;
+    sort(A.begin(),A.end());
+    for(auto& [y,x]:A) cout<<x<<' '<<y<<'\n';
 }
