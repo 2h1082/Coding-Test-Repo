@@ -1,20 +1,15 @@
-#include <bits/stdc++.h>
-
+#include "bits/stdc++.h"
 using namespace std;
 
 int main()
 {
-    int N=0;
-    cin>>N;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
     
-    vector<int> Nums(N,0);
-    for(auto& Num : Nums)
-    {
-        cin>>Num;
-    }
-    sort(Nums.begin(),Nums.end());
-    for(auto& Num : Nums)
-    {
-        cout<<Num<<"\n";
-    }
+    int N;
+    cin>>N;
+    vector<int> A(N);
+    for(auto& a: A) cin>>a;
+    sort(A.begin(),A.end());
+    for(auto& a : A) cout<<a<<'\n';
 }
