@@ -10,44 +10,29 @@ int main()
     cin>>N;
     
     vector<int> Dp(N+1,1e9), Prev(N+1,-1);
-    Dp[N]=0;
-    for(int i=N;i>=1;--i)
+    Dp[1]=0;
+    for(int i=2;i<=N;++i)
     {
-        int NxtIdx=0, NxtVal=Dp[i]+1;;
-        if(i%3==0)
+        Dp[i]=Dp[i-1]+1;
+        Prev[i]=i-1;
+        if(i%3==0 && Dp[i/3]+1 < Dp[i])
         {
-            NxtIdx=i/3;
-            if(NxtVal < Dp[NxtIdx]) 
-            {
-                Dp[NxtIdx]=NxtVal;
-                Prev[NxtIdx]=i;
-            }
+            Dp[i]=Dp[i/3]+1;
+            Prev[i]=i/3;
         }
-        if(i%2==0)
+        if(i%2==0 && Dp[i/2]+1 < Dp[i])
         {
-            NxtIdx=i/2;
-            if(NxtVal < Dp[NxtIdx]) 
-            {
-                Dp[NxtIdx]=NxtVal;
-                Prev[NxtIdx]=i;
-            }
-        }
-        NxtIdx=i-1;
-        if(NxtVal < Dp[NxtIdx]) 
-        {
-            Dp[NxtIdx]=NxtVal;
-            Prev[NxtIdx]=i;
+            Dp[i]=Dp[i/2]+1;
+            Prev[i]=i/2;
         }
     }
-    cout<<Dp[1]<<'\n';
+    cout<<Dp[N]<<'\n';
     
-    int Cur=1;
-    vector<int> Ans;
-    while (Prev[Cur]!=-1)
+    int Cur=N;
+    while (1)
     {
-        Ans.push_back(Cur);
+        cout<<Cur<<' ';
+        if(Cur==1) break;
         Cur=Prev[Cur];
     }
-    cout<<N<<' ';
-    for(auto It=Ans.rbegin();It!=Ans.rend();++It) cout<<*It<<' ';
 }
