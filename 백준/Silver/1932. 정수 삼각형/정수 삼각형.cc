@@ -1,35 +1,31 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
+#include "bits/stdc++.h"
 using namespace std;
 
-int N=0;
-vector<vector<int>> Triangle;
-vector<vector<int>> DP;
 int main()
 {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int N;
     cin>>N;
-    Triangle.assign(N,vector<int>());
+    vector<vector<int>> Dp(N,vector<int>(N,0)), A(N);
     for(int i=0;i<N;++i)
     {
         for(int j=0;j<=i;++j)
         {
-            int Num=0;
+            int Num;
             cin>>Num;
-            Triangle[i].push_back(Num);
+            A[i].push_back(Num);
         }
     }
-    DP.assign(N,vector<int>(N,0));
-    DP[0][0]=Triangle[0][0];
+    Dp[0][0]=A[0][0];
     for(int i=1;i<N;++i)
     {
-        for(int j=0;j<i;++j)
+        for(int j=0;j<=i;++j)
         {
-            DP[i][j]=max(DP[i][j],Triangle[i][j]+DP[i-1][j]);
-            DP[i][j+1]=Triangle[i][j+1]+DP[i-1][j];
+            Dp[i][j]=max(Dp[i][j],Dp[i-1][j]+A[i][j]);
+            if(j>0) Dp[i][j]=max(Dp[i][j],Dp[i-1][j-1]+A[i][j]);
         }
     }
-    int Max=*max_element(DP[N-1].begin(),DP[N-1].end());
-    cout<<Max;
+    cout<<*max_element(Dp[N-1].begin(), Dp[N-1].end());
 }
