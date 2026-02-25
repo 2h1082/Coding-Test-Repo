@@ -1,27 +1,17 @@
-#include <iostream>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
+
+int Mod=10007;
 int main()
 {
-    int N=0;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int N;
     cin>>N;
-    vector<int> Dp(N+1);
-    if(N==1)
-    {
-        cout<<1;
-        return 0;
-    }
-    else if(N==2)
-    {
-        cout<<3;
-        return 0;
-    }
-    Dp[1]=1;
-    Dp[2]=3;
-    for(int i=3;i<=N;++i)
-    {
-        Dp[i]=(Dp[i-2]*2+Dp[i-1])%10007;
-    }
-    cout<<Dp[N];
+    vector<int> Dp(N,0);
+    Dp[0]=1;
+    Dp[1]=3;
+    for(int i=2;i<N;++i) Dp[i]=(Dp[i-2]*2+Dp[i-1])%Mod;
+    cout<<Dp[N-1];
 }
