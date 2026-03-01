@@ -1,26 +1,22 @@
-#include <iostream>
-#include <vector>
-
+#include "bits/stdc++.h"
 using namespace std;
+
 int main()
 {
-    int T=0;
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    vector<long long> Dp(101,0);
+    Dp[1]=Dp[2]=Dp[3]=1;
+    Dp[4]=Dp[5]=2;
+    for(int i=6;i<=100;++i) Dp[i]=Dp[i-1]+Dp[i-5];
+    
+    int T;
     cin>>T;
-    vector<long long> Dp(101);
-    int Limit=5;
-    Dp[1]=1;
-    Dp[2]=1;
-    Dp[3]=1;
-    Dp[4]=2;
-    Dp[5]=2;
     while(T--)
     {
-        int N=0;
+        int N;
         cin>>N;
-        for(;Limit<=N;++Limit)
-        {
-            Dp[Limit]=Dp[Limit-1]+Dp[Limit-5];
-        }
-        cout<<Dp[N]<<"\n";
+        cout<<Dp[N]<<'\n';
     }
-}     
+}
