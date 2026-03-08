@@ -10,16 +10,13 @@ int main()
     int N;
     cin>>N;
     
-    vector<vector<int>> Dp(N+1,vector<int>(10,0));
-    for(int i=0;i<10;++i) Dp[1][i]=1;
-    for(int l=2;l<=N;++l)
+    vector<int> Dp(10,1);
+    for(int l=0;l<N;++l)
     {
-        for(int i=0;i<10;++i)
+        for(int i=1;i<10;++i)
         {
-            for(int j=0;j<=i;++j) Dp[l][i]=(Dp[l][i]+Dp[l-1][j])%Mod;
+            Dp[i]=(Dp[i]+Dp[i-1])%Mod;
         }
     }
-    int Ans=accumulate(Dp[N].begin(),Dp[N].end(),0);
-    Ans%=Mod;
-    cout<<Ans;
+    cout<<Dp[9];
 }
