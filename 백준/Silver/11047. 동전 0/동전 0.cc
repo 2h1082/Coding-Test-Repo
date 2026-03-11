@@ -8,13 +8,15 @@ int main()
     
     int N,K;
     cin>>N>>K;
+    
     vector<int> A(N,0);
-    for(int i=N-1;i>=0;--i) cin>>A[i];
-    int Cnt=0;
-    for(int i=0;i<N;++i)
+    for(auto& a : A) cin>>a;
+    
+    int Ans=0;
+    for(int i=N-1;i>=0;--i)
     {
-        Cnt+=K/A[i];
+        Ans+=K/A[i];
         K%=A[i];
     }
-    cout<<Cnt;
+    cout<<Ans;
 }
