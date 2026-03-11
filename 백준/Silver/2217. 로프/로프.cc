@@ -8,14 +8,14 @@ int main()
     
     int N;
     cin>>N;
-    vector<int> A(N);
+    vector<int> A(N,0);
     for(auto& a : A) cin>>a;
-    sort(A.begin(),A.end(),greater<>());
+    sort(A.begin(),A.end());
     
-    int Ans=0;
+    int Max=0;
     for(int i=0;i<N;++i)
     {
-        Ans=max({Ans,A[i],A[i]*(i+1)});
+        Max=max(Max,A[i]*(N-i));
     }
-    cout<<Ans;
+    cout<<Max;
 }
