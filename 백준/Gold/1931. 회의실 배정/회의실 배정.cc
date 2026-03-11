@@ -8,20 +8,18 @@ int main()
     
     int N;
     cin>>N;
-    vector<pair<int,int>> T(N);
-    for(auto& [S,E]:T) cin>>S>>E;
-    sort(T.begin(),T.end(),[](const auto& P1, const auto& P2){
-        if(P1.second==P2.second) return P1.first < P2.first;
-        return P1.second < P2.second;
-    });
-    int Ans=0, Cur=0;
-    for(const auto& [S, E] : T)
+    vector<pair<int,int>> A(N);
+    for(auto& [e,s] : A) cin>>s>>e;
+    sort(A.begin(),A.end());
+    
+    int Cnt=0, Cur=0;
+    for(auto& [e,s] : A)
     {
-        if(Cur <= S)
+        if(Cur<=s)
         {
-            Cur=E;
-            ++Ans;
+            Cur=e;
+            ++Cnt;
         }
     }
-    cout<<Ans;
+    cout<<Cnt;
 }
